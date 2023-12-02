@@ -5,7 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class Banda {
-	/*Atributos da classe Banda*/
+	//Atributos da classe Banda
 	private int id_banda;
 	private String nome;
 	private String pais;
@@ -36,7 +36,7 @@ public class Banda {
 			"NEW WAVE OF AMERICAN METAL"
 	};  
 	
-	/*CONSTRUTOR*/
+	//CONSTRUCTOR
 	public Banda() { }
 	
 	public int getId_banda() {
