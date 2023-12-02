@@ -68,7 +68,7 @@ public class Banda {
 	/*VERIFICA REGISTRO DE NOME DA BANDA*/
 	private boolean verificarSeExiste(String nome) {		  
 		Connection conexao = null;
-		try {
+		try {			
 			conexao = Conexao.conectaBanco();
 			String sql = "SELECT nome FROM banda WHERE nome=?";
 			PreparedStatement ps = conexao.prepareStatement(sql);
@@ -88,40 +88,85 @@ public class Banda {
 			Conexao.fechaConexao(conexao);
 		}
 	}
+	/*VERIFICA SE A QUERY FOI EXECUTADA*/
+	private boolean verificarRegistro(PreparedStatement ps, String msgSucces, String msgError) {
+		try {
+			int totalRegistrosAfetados = ps.executeUpdate();
+			if (!(totalRegistrosAfetados == 0)) { 
+				System.out.println(msgSucces);
+				return true; 
+			} else {
+				System.out.println(msgError);
+				return false;		
+			}
+		} catch (SQLException e) {
+			System.out.println("Erro ao verificar registro no banco" +e.toString());
+			return false;
+		}	
+	}
 	
 	/*MÉTODOS PÚBLICOS ABAIXO
 	*---------------------------------------*/
 	
 	/*CADASTRAR*/
-	public boolean cadastrarBanda(Banda banda) {
+	public boolean cadastrarBanda(Banda banda, String genero) {
 		Connection conexao = null;
 		try {
 			if (this.verificarSeExiste(banda.nome)) {
 				conexao = Conexao.conectaBanco();
-				String sql = "";
-				PreparedStatement ps = conexao.prepareStatement(sql);
-				int totalRegistrosAfetados = ps.executeUpdate();
-				ps.setString(1, banda.nome);
-				/*TERMINAR A ADIÇÃO*/
-				
-				if (!(totalRegistrosAfetados == 0)) { 
-					System.out.println("Cadastro realizado");return true; 
-				} else {
-					System.out.println("Cadastro não realizado");
-					return false;
-				}
-				
+				String sql = "INSERT INTO banda (id_banda, nome, genero, pais) values(?, ?, ?, ?)";
+				PreparedStatement ps = conexao.prepareStatement(sql);				
+				ps.setInt(1, banda.id_banda);
+				ps.setString(2, banda.nome);
+				ps.setString(3, genero);
+				ps.setString(4, banda.pais);
+				return this.verificarRegistro(ps, "Banda cadastrada com sucesso!", "Banda cadastrada sem sucesso");
 			}
-			
 			return false;
 		}  catch (SQLException e) {
 			System.out.println("Erro ao cadastrar banda: " + e.toString());
 			return false;
-		}finally {
-			Conexao.fechaConexao(conexao);
-		}
-				
+		} finally {
+			if (conexao != null) { Conexao.fechaConexao(conexao);}
+		}				
+	}
+	/*ATUALIZAR*/
+	public boolean atualizarBanda(Banda banda, String genero) {
+		Connection conexao = null;
+		try {			
+			if (this.verificarSeExiste(banda.nome)) {
+				conexao = Conexao.conectaBanco();
+				String sql = "UPDATE banda SET nome=?, genero=?, pais=? WHERE id_banda=?";
+				PreparedStatement ps = conexao.prepareStatement(sql);		
+				ps.setString(1, banda.nome);
+				ps.setString(2, genero);
+				ps.setString(3, banda.pais);
+				ps.setInt(4, banda.id_banda);				
+				return this.verificarRegistro(ps, "Atualização realizada", "Cadastro não realizado");				
+			}
+			return false;
+		} catch (SQLException e) {
+			System.out.println("Erro ao atualizar banda: " + e.toString());
+			return false;
+		} finally {
+			if (conexao != null) { Conexao.fechaConexao(conexao);}
+		}			
+	}
+	/*EXCLUIR*/
+	public boolean excluirBanda() {
+		Connection conexao = null;
+		try {
+			conexao = Conexao.conectaBanco();
+			String sql = "DELETE from banda WHERE id_banda=?";
+			PreparedStatement ps = conexao.prepareStatement(sql);
+			ps.setInt(1, this.id_banda);
+			return this.verificarRegistro(ps, "Exclusão realizada", "Exclusão não realizada");			
+		} catch (SQLException e) {
+			System.out.println("Erro ao atualizar banda: " + e.toString());
+			return false;
+		} finally {
+			if (conexao != null) { Conexao.fechaConexao(conexao);}
+		}		
 	}
 }
-	/*ATUALIZAR*/
-	/*EXCLUIR*/
+	
