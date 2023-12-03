@@ -76,7 +76,7 @@ public class JanelaBanda {
         
         /*INSTANCIAS*/
         Banda banda = new Banda();
-      
+		
         botaoCadastrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {							
 				banda.setNome(campoNomeBanda.getText());
@@ -86,8 +86,7 @@ public class JanelaBanda {
 					System.out.println("");
 				} else {
 					System.out.println("Não foi possível cadastrar");
-				}
-								
+				}								
 			}
 		});
         
@@ -104,14 +103,16 @@ public class JanelaBanda {
 					){
 						int id = Integer.parseInt(JOptionPane.showInputDialog("Digite o id da banda para editar:"));
 						banda.getBanda(id);
+						banda.setId_banda(id);
 						campoNomeBanda.setText(banda.getNome());				
-						campoPais.setText(banda.getPais());									
+						campoPais.setText(banda.getPais());							
 						dropdownGenero.setSelectedItem(banda.getGenero());
 					} else {
 						//BLOCO COM OS CAMPOS PREENCHIDOS
-						banda.setNome(campoNomeBanda.getText());
-						banda.setPais(campoPais.getText());
-						banda.atualizarBanda(dropdownGenero.getSelectedItem().toString());
+						String nome = campoNomeBanda.getText();
+						String pais = campoPais.getText();
+						String genero = dropdownGenero.getSelectedItem().toString();
+						banda.atualizarBanda(banda.getId_banda(), nome, genero, pais);					
 						JOptionPane.showMessageDialog(janelaBanda, "Atualização realizada com sucesso!");
 					}
 				} catch (Exception erro) {

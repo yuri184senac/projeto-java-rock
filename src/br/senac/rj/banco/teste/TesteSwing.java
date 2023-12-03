@@ -28,7 +28,7 @@ public class TesteSwing {
 		ImageIcon imagemDeFundo = new ImageIcon("src/imagem/wings.png");
 		JLabel labelComBackground = new JLabel(imagemDeFundo);
 		labelComBackground.setPreferredSize(new Dimension(400, 330));
-      
+		
 		JFrame janelaPrincipal = new JFrame("Shows de Rock"); // Janela Normal
 		janelaPrincipal.setTitle("Gestão de Bandas de Rock");
 		janelaPrincipal.setResizable(false); 

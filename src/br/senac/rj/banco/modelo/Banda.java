@@ -98,7 +98,7 @@ public class Banda {
 			System.out.println("Erro ao cadastrar banda: " + e.toString());
 			return false;
 		}finally {
-			if (conexao != null) { Conexao.fechaConexao(conexao);}
+			if (conexao != null) { Conexao.fechaConexao(conexao); }
 		}
 	}
 	/*VERIFICA SE A QUERY FOI EXECUTADA*/
@@ -158,8 +158,7 @@ public class Banda {
 				this.id_banda = rs.getInt("id_banda");				
 				this.nome = rs.getString("nome");
 				this.genero = rs.getString("genero");
-				this.pais = rs.getString("pais");
-				
+				this.pais = rs.getString("pais");				
 			}		
 			return true;
 		} catch (SQLException e) {
@@ -194,18 +193,18 @@ public class Banda {
 		}				
 	}
 	/*ATUALIZAR*/
-	public boolean atualizarBanda(String genero) {		
+	public boolean atualizarBanda(int id, String nome, String genero, String pais) {		
 		Connection conexao = null;
 		try {			
 			//NÃO ESTÁ ATUALIZANDO
-			if (!this.verificarSeExiste(this.nome)) {				
+			if (this.verificarSeExiste(nome)) {				
 				conexao = Conexao.conectaBanco();
 				String sql = "UPDATE banda SET nome=?, genero=?, pais=? WHERE id_banda=?";
 				PreparedStatement ps = conexao.prepareStatement(sql);		
-				ps.setString(1, this.nome);
+				ps.setString(1, nome);
 				ps.setString(2, genero);
-				ps.setString(3, this.pais);
-				ps.setInt(4, this.id_banda);				
+				ps.setString(3, pais);
+				ps.setInt(4, id);				
 				return this.verificarRegistro(ps, "Atualização realizada", "Cadastro não realizado");				
 			}
 			return false;
