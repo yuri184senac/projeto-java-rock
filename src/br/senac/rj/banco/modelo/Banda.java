@@ -1,8 +1,10 @@
 package br.senac.rj.banco.modelo;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Random;
 
 public class Banda {
 	//Atributos da classe Banda
@@ -105,21 +107,46 @@ public class Banda {
 		}	
 	}
 	
+	private int gerarId() {
+		Random rand = new Random();		
+		boolean flag = true;
+		int num = rand.nextInt(1,9999);
+		Connection conexao = null;
+	    try {	    	
+	    	conexao = Conexao.conectaBanco();
+	    	do {
+	    		String sql = "SELECT id_banda FROM banda WHERE id_banda=?";
+				PreparedStatement ps = conexao.prepareStatement(sql);				
+				ps.setInt(1, num);//verifica se tem uma banda com esse id
+				ResultSet result = ps.executeQuery();
+				flag = result.isFirst();
+				if (flag) { num = rand.nextInt(1,9999); }
+	    	} while (flag); //verifica se novoId gerado é igual ao id retornando do banco	    
+	    } catch (SQLException e) {
+			System.out.println("Erro ao cadastrar banda: " + e.toString());
+		} finally {
+			if (conexao != null) { Conexao.fechaConexao(conexao);}
+		}			
+	    return num;
+	} 
+	   
+	
 	/*MÉTODOS PÚBLICOS ABAIXO
 	*---------------------------------------*/
 	
 	/*CADASTRAR*/
-	public boolean cadastrarBanda(Banda banda, String genero) {
+	public boolean cadastrarBanda(String genero) {
+		Random rnd = new Random();		
 		Connection conexao = null;
 		try {
-			if (this.verificarSeExiste(banda.nome)) {
+			if (this.verificarSeExiste(this.nome)) {
 				conexao = Conexao.conectaBanco();
 				String sql = "INSERT INTO banda (id_banda, nome, genero, pais) values(?, ?, ?, ?)";
 				PreparedStatement ps = conexao.prepareStatement(sql);				
-				ps.setInt(1, banda.id_banda);
-				ps.setString(2, banda.nome);
+				ps.setInt(1, this.gerarId());
+				ps.setString(2, this.nome);
 				ps.setString(3, genero);
-				ps.setString(4, banda.pais);
+				ps.setString(4, this.pais);
 				return this.verificarRegistro(ps, "Banda cadastrada com sucesso!", "Banda cadastrada sem sucesso");
 			}
 			return false;
