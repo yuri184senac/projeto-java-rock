@@ -10,7 +10,7 @@ public class cadastroTeste {
 		banda.setId_banda(1);
 		banda.setNome("Angra");
 		banda.setPais("Brasil");
-		banda.cadastrarBanda(banda, "Heavy Metal");
+		banda.cadastrarBanda("Heavy Metal");
 		
 	}
 

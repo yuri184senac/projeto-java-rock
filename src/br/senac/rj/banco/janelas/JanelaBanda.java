@@ -41,7 +41,7 @@ public class JanelaBanda {
         // Gênero da Banda (Dropdown)
         JLabel labelGenero = new JLabel("Gênero:");
         labelGenero.setBounds(50, 160, 120, 20);
-        String[] generos = Banda.genero;
+        String[] generos = Banda.generoList;
         JComboBox<String> dropdownGenero = new JComboBox<>(generos);
         dropdownGenero.setBounds(180, 160, 150, 20);
 
@@ -83,18 +83,41 @@ public class JanelaBanda {
 				banda.setPais(campoPais.getText());
 				Boolean result = banda.cadastrarBanda(dropdownGenero.getSelectedItem().toString());
 				if (result) {
-					System.out.println("1");
+					System.out.println("");
 				} else {
-					System.out.println("2");
+					System.out.println("Não foi possível cadastrar");
 				}
 								
 			}
 		});
         
-        botaoEditar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {			
-				System.out.println("teste");
-			}
+        
+        botaoEditar.addActionListener(new ActionListener() {        	
+			public void actionPerformed(ActionEvent e) {	
+				try {
+					//BLOCO SE OS CAMPOS TIVEREM VAZIOS
+					if ( 
+						(campoNomeBanda.getText() == null  || campoNomeBanda.getText().trim().isEmpty()) ||
+						(campoPais.getText() == null  || campoPais.getText().trim().isEmpty()) ||
+						(campoIntegrantes.getText() == null  || campoIntegrantes.getText().trim().isEmpty()) ||
+						(dropdownGenero.getSelectedItem().toString().trim().isEmpty())							
+					){
+						int id = Integer.parseInt(JOptionPane.showInputDialog("Digite o id da banda para editar:"));
+						banda.getBanda(id);
+						campoNomeBanda.setText(banda.getNome());				
+						campoPais.setText(banda.getPais());									
+						dropdownGenero.setSelectedItem(banda.getGenero());
+					} else {
+						//BLOCO COM OS CAMPOS PREENCHIDOS
+						banda.setNome(campoNomeBanda.getText());
+						banda.setPais(campoPais.getText());
+						banda.atualizarBanda(dropdownGenero.getSelectedItem().toString());
+						JOptionPane.showMessageDialog(janelaBanda, "Atualização realizada com sucesso!");
+					}
+				} catch (Exception erro) {
+					 JOptionPane.showMessageDialog(janelaBanda, "Preencha os campos corretamente!");
+                } 									
+			}			
 		});
         
         botaoLimpar.addActionListener(new ActionListener() {

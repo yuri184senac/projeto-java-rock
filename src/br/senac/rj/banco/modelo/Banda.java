@@ -2,16 +2,23 @@ package br.senac.rj.banco.modelo;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
 import java.util.Random;
+
+
 
 public class Banda {
 	//Atributos da classe Banda
-	private int id_banda;
+	private int id_banda;	
 	private String nome;
 	private String pais;
-	public static String[] genero = {
+	private String genero;
+	
+	public static String[] generoList = {
+			"",
 			"EARLY METAL",
 			"ORIGINAL HARD ROCK",
 			"SHOCK ROCK",
@@ -64,6 +71,10 @@ public class Banda {
 	public void setPais(String pais) {
 		this.pais = pais;
 	};
+	
+	public String getGenero() {
+		return genero;
+	}
 	/*#MÉTODOS PRIVADOS ABAIXO
 	* ---------------------------------------*/
 	
@@ -77,9 +88,9 @@ public class Banda {
 			ps.setString(1, nome);
 			ResultSet rs = ps.executeQuery();
 			if (!rs.isBeforeFirst()) { //Verifica se não está antes do primeiro registro
-				System.out.println("verificarBanda() --> Banda não existe");
+				System.out.println("verificarBanda() --> Banda não existe");				
 				return true;
-			} else {
+			} else {				
 				System.out.println("verificarBanda() --> Banda já existe");
 				return false;
 			}
@@ -87,7 +98,7 @@ public class Banda {
 			System.out.println("Erro ao cadastrar banda: " + e.toString());
 			return false;
 		}finally {
-			Conexao.fechaConexao(conexao);
+			if (conexao != null) { Conexao.fechaConexao(conexao);}
 		}
 	}
 	/*VERIFICA SE A QUERY FOI EXECUTADA*/
@@ -134,6 +145,31 @@ public class Banda {
 	/*MÉTODOS PÚBLICOS ABAIXO
 	*---------------------------------------*/
 	
+	
+	public boolean getBanda(int id) {
+		Connection conexao = null;
+		try {			
+			conexao = Conexao.conectaBanco();
+			String sql = "SELECT * FROM banda WHERE id_banda=?";
+			PreparedStatement ps = conexao.prepareStatement(sql);
+			ps.setInt(1, id);
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				this.id_banda = rs.getInt("id_banda");				
+				this.nome = rs.getString("nome");
+				this.genero = rs.getString("genero");
+				this.pais = rs.getString("pais");
+				
+			}		
+			return true;
+		} catch (SQLException e) {
+			System.out.println("Erro ao atualizar banda: " + e.toString());
+			return false;
+		} finally {
+			if (conexao != null) { Conexao.fechaConexao(conexao);}
+		}		
+	}
+	
 	/*CADASTRAR*/
 	public boolean cadastrarBanda(String genero) {
 		Random rnd = new Random();		
@@ -158,17 +194,18 @@ public class Banda {
 		}				
 	}
 	/*ATUALIZAR*/
-	public boolean atualizarBanda(Banda banda, String genero) {
+	public boolean atualizarBanda(String genero) {		
 		Connection conexao = null;
 		try {			
-			if (this.verificarSeExiste(banda.nome)) {
+			//NÃO ESTÁ ATUALIZANDO
+			if (!this.verificarSeExiste(this.nome)) {				
 				conexao = Conexao.conectaBanco();
 				String sql = "UPDATE banda SET nome=?, genero=?, pais=? WHERE id_banda=?";
 				PreparedStatement ps = conexao.prepareStatement(sql);		
-				ps.setString(1, banda.nome);
+				ps.setString(1, this.nome);
 				ps.setString(2, genero);
-				ps.setString(3, banda.pais);
-				ps.setInt(4, banda.id_banda);				
+				ps.setString(3, this.pais);
+				ps.setInt(4, this.id_banda);				
 				return this.verificarRegistro(ps, "Atualização realizada", "Cadastro não realizado");				
 			}
 			return false;
