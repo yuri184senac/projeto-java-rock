@@ -25,7 +25,7 @@ public class TesteSwing {
 		// -------------JANELA PRINCIPAL----------------
 		
 		//Background
-		ImageIcon imagemDeFundo = new ImageIcon("src/imagem/wings.png");
+		ImageIcon imagemDeFundo = new ImageIcon("./src/imagem/wings.png");
 		JLabel labelComBackground = new JLabel(imagemDeFundo);
 		labelComBackground.setPreferredSize(new Dimension(400, 330));
 		
@@ -75,7 +75,7 @@ public class TesteSwing {
 		//SubMenus Show				
 		JMenuItem subMenuAtualizarShow = new JMenuItem("Atualizar");		
 		menuShow.add(subMenuAtualizarShow);
-				
+		
 		//Ações dos SubMenus de atualização
 		subMenuAtualizarBanda.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -84,8 +84,7 @@ public class TesteSwing {
 		});
 		
 		subMenuAtualizarIntegrantes.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				
+			public void actionPerformed(ActionEvent arg0) {				
 				janelaIntegrantes.setVisible(true);
 			}
 		});

@@ -1,6 +1,9 @@
 package br.senac.rj.banco.janelas;
 
 import javax.swing.*;
+
+import br.senac.rj.banco.modelo.Show;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,17 +15,26 @@ public class JanelaShow {
         janelaShow.setResizable(false);
         janelaShow.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         janelaShow.setSize(400, 330);
-
-        // Define o layout da janela
+        janelaShow.getContentPane().setBackground(Color.decode("#282829"));      
+        
+        //Organizar os campos na tela integrantes
         Container caixa = janelaShow.getContentPane();
         caixa.setLayout(null);
+        janelaShow.setLayout(null);
+        
 
         // Define os labels dos campos
         JLabel labelIdBanda = new JLabel("ID da Banda:");
         JLabel labelNome = new JLabel("Nome:");
         JLabel labelPais = new JLabel("País:");
         JLabel labelDataShow = new JLabel("Data do Show:");
-
+        
+        //Fonte Branco
+        labelIdBanda.setForeground(Color.WHITE);
+        labelNome.setForeground(Color.WHITE);
+        labelPais.setForeground(Color.WHITE);
+        labelDataShow.setForeground(Color.WHITE);
+        
         // Posiciona os labels na janela
         labelIdBanda.setBounds(50, 40, 100, 20);
         labelNome.setBounds(50, 80, 100, 20);
@@ -49,7 +61,7 @@ public class JanelaShow {
         janelaShow.add(jTextDataShow);
 
         // Define o JComboBox para o campo "País"
-        String[] paises = {"Brasil", "Estados Unidos", "França"};
+        String[] paises = Show.paisList;
         JComboBox<String> dropdownPais = new JComboBox<>(paises);
         dropdownPais.setBounds(190, 120, 150, 20);
 

@@ -8,6 +8,8 @@ import java.sql.SQLException;
 
 import java.util.Random;
 
+import br.senac.rj.banco.service.Utilitarios;
+
 
 
 public class Banda {
@@ -101,65 +103,25 @@ public class Banda {
 			if (conexao != null) { Conexao.fechaConexao(conexao); }
 		}
 	}
-	/*VERIFICA SE A QUERY FOI EXECUTADA*/
-	private boolean verificarRegistro(PreparedStatement ps, String msgSucces, String msgError) {
-		try {
-			int totalRegistrosAfetados = ps.executeUpdate();
-			if (!(totalRegistrosAfetados == 0)) { 
-				System.out.println(msgSucces);
-				return true; 
-			} else {
-				System.out.println(msgError);
-				return false;		
-			}
-		} catch (SQLException e) {
-			System.out.println("Erro ao verificar registro no banco" +e.toString());
-			return false;
-		}	
-	}
-	
-	private int gerarId() {
-		Random rand = new Random();		
-		boolean flag = true;
-		int num = rand.nextInt(1,9999);
-		Connection conexao = null;
-	    try {	    	
-	    	conexao = Conexao.conectaBanco();
-	    	do {
-	    		String sql = "SELECT id_banda FROM banda WHERE id_banda=?";
-				PreparedStatement ps = conexao.prepareStatement(sql);				
-				ps.setInt(1, num);//verifica se tem uma banda com esse id
-				ResultSet result = ps.executeQuery();
-				flag = result.isFirst();
-				if (flag) { num = rand.nextInt(1,9999); }
-	    	} while (flag); //verifica se novoId gerado é igual ao id retornando do banco	    
-	    } catch (SQLException e) {
-			System.out.println("Erro ao cadastrar banda: " + e.toString());
-		} finally {
-			if (conexao != null) { Conexao.fechaConexao(conexao);}
-		}			
-	    return num;
-	} 
-	   
-	
+			
+	   	
 	/*MÉTODOS PÚBLICOS ABAIXO
 	*---------------------------------------*/
 	
 	
-	public boolean getBanda(int id) {
+	public boolean getBanda(String nome) {
 		Connection conexao = null;
 		try {			
 			conexao = Conexao.conectaBanco();
-			String sql = "SELECT * FROM banda WHERE id_banda=?";
-			PreparedStatement ps = conexao.prepareStatement(sql);
-			ps.setInt(1, id);
+			String sql =  "SELECT * FROM banda WHERE nome LIKE '%"+nome+"%'";
+			PreparedStatement ps = conexao.prepareStatement(sql);			
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
 				this.id_banda = rs.getInt("id_banda");				
 				this.nome = rs.getString("nome");
 				this.genero = rs.getString("genero");
 				this.pais = rs.getString("pais");				
-			}		
+			}				
 			return true;
 		} catch (SQLException e) {
 			System.out.println("Erro ao atualizar banda: " + e.toString());
@@ -170,19 +132,18 @@ public class Banda {
 	}
 	
 	/*CADASTRAR*/
-	public boolean cadastrarBanda(String genero) {
-		Random rnd = new Random();		
+	public boolean cadastrarBanda(String genero) {				
 		Connection conexao = null;
 		try {
 			if (this.verificarSeExiste(this.nome)) {
 				conexao = Conexao.conectaBanco();
 				String sql = "INSERT INTO banda (id_banda, nome, genero, pais) values(?, ?, ?, ?)";
 				PreparedStatement ps = conexao.prepareStatement(sql);				
-				ps.setInt(1, this.gerarId());
+				ps.setInt(1, Utilitarios.gerarId());
 				ps.setString(2, this.nome);
 				ps.setString(3, genero);
 				ps.setString(4, this.pais);
-				return this.verificarRegistro(ps, "Banda cadastrada com sucesso!", "Banda cadastrada sem sucesso");
+				return Utilitarios.verificarRegistro(ps, "Banda cadastrada com sucesso!", "Banda cadastrada sem sucesso");
 			}
 			return false;
 		}  catch (SQLException e) {
@@ -195,19 +156,15 @@ public class Banda {
 	/*ATUALIZAR*/
 	public boolean atualizarBanda(int id, String nome, String genero, String pais) {		
 		Connection conexao = null;
-		try {			
-			//NÃO ESTÁ ATUALIZANDO
-			if (this.verificarSeExiste(nome)) {				
-				conexao = Conexao.conectaBanco();
-				String sql = "UPDATE banda SET nome=?, genero=?, pais=? WHERE id_banda=?";
-				PreparedStatement ps = conexao.prepareStatement(sql);		
-				ps.setString(1, nome);
-				ps.setString(2, genero);
-				ps.setString(3, pais);
-				ps.setInt(4, id);				
-				return this.verificarRegistro(ps, "Atualização realizada", "Cadastro não realizado");				
-			}
-			return false;
+		try {											
+			conexao = Conexao.conectaBanco();
+			String sql = "UPDATE banda SET nome=?, genero=?, pais=? WHERE id_banda=?";
+			PreparedStatement ps = conexao.prepareStatement(sql);		
+			ps.setString(1, nome);
+			ps.setString(2, genero);
+			ps.setString(3, pais);
+			ps.setInt(4, id);				
+			return Utilitarios.verificarRegistro(ps, "Atualização realizada", "Atualização não realizada");									
 		} catch (SQLException e) {
 			System.out.println("Erro ao atualizar banda: " + e.toString());
 			return false;
@@ -216,14 +173,14 @@ public class Banda {
 		}			
 	}
 	/*EXCLUIR*/
-	public boolean excluirBanda() {
+	public boolean deletarBanda() {
 		Connection conexao = null;
 		try {
 			conexao = Conexao.conectaBanco();
 			String sql = "DELETE from banda WHERE id_banda=?";
 			PreparedStatement ps = conexao.prepareStatement(sql);
 			ps.setInt(1, this.id_banda);
-			return this.verificarRegistro(ps, "Exclusão realizada", "Exclusão não realizada");			
+			return Utilitarios.verificarRegistro(ps, "Exclusão realizada", "Exclusão não realizada");			
 		} catch (SQLException e) {
 			System.out.println("Erro ao atualizar banda: " + e.toString());
 			return false;
