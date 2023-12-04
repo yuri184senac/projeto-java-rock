@@ -17,6 +17,7 @@ import javax.swing.WindowConstants;
 
 import br.senac.rj.banco.janelas.JanelaBanda;
 import br.senac.rj.banco.janelas.JanelaIntegrantes;
+import br.senac.rj.banco.janelas.JanelaListaShows;
 import br.senac.rj.banco.janelas.JanelaShow;
 
 public class TesteSwing {
@@ -67,7 +68,7 @@ public class TesteSwing {
 		//-------------------SHOW---------------------------
 		//Janela Show		 	
 		JFrame janelaShow = JanelaShow.criarJanelaShow();
-		
+		JFrame janelaListaShow = JanelaListaShows.criarJanelaListaShows();
 		//Menu Show		
 		JMenu menuShow = new JMenu("Show");
 		menuBar.add(menuShow);
@@ -75,6 +76,8 @@ public class TesteSwing {
 		//SubMenus Show				
 		JMenuItem subMenuAtualizarShow = new JMenuItem("Atualizar");		
 		menuShow.add(subMenuAtualizarShow);
+		JMenuItem subMenuListarShow = new JMenuItem("Visualizar");		
+		menuShow.add(subMenuListarShow);
 		
 		//Ações dos SubMenus de atualização
 		subMenuAtualizarBanda.addActionListener(new ActionListener() {
@@ -93,6 +96,13 @@ public class TesteSwing {
 			public void actionPerformed(ActionEvent arg0) {
 				
 				janelaShow.setVisible(true);
+			}
+		});
+		
+		subMenuListarShow.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				janelaListaShow.setVisible(true);
+				
 			}
 		});
 		

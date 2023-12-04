@@ -5,6 +5,8 @@ import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -13,6 +15,7 @@ import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
 import br.senac.rj.banco.modelo.Integrantes;
+import br.senac.rj.banco.service.Utilitarios;
 
 public class JanelaIntegrantes {
 
@@ -94,31 +97,46 @@ public class JanelaIntegrantes {
         // Corrigi as coordenadas do botão "Deletar" para ficar ao lado do botão "Editar"
         botaoDeletar.setBounds(270, 240, 100, 30);
         janelaIntegrantes.add(botaoDeletar);
-
+        
+        //BOTOES
+        botaoEditar.setEnabled(false);
+        
         //INSTANCIA
         Integrantes intg = new Integrantes();
         //Botao após clicar no cadastrar
+        //OK - FALTA O BAIXISTA
         botaoCadastrar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 try {
                     int fkBanda = Integer.parseInt(jTextFkBanda.getText());
                     String vocalista = jTextVocalista.getText().trim();
                     String baterista = jTextBaterista.getText().trim();
+                    //String baixista = jTextBaixista.getText().trim();
                     String guitarrista = jTextGuitarrista.getText().trim();
                     String guitarrista2 = jTextGuitarrista2.getText().trim();
                     
                     // Verifica se todos os campos estão preenchidos
                     if (fkBanda == 0 || vocalista.isEmpty() || baterista.isEmpty() || guitarrista.isEmpty() || guitarrista2.isEmpty()) {
                         JOptionPane.showMessageDialog(janelaIntegrantes, "Preencha todos os campos antes de cadastrar!",
-                                "Aviso", JOptionPane.WARNING_MESSAGE);
+                        "Aviso", JOptionPane.WARNING_MESSAGE                             
+                        ) ;
                     } else {
-                        // Aqui você deve chamar o método de cadastro do integrante com os valores obtidos
-                        // integrante.cadastrarIntegrante(...);
-                    	intg.cadastrarIntegrante(guitarrista2, fkBanda)
-
-                        JOptionPane.showMessageDialog(janelaIntegrantes, "Integrante cadastrado com sucesso! 🎸❤️");
-                        limparCampos();
-                        botaoEditar.setEnabled(true); // Habilita o botão de editar após o cadastro
+                    	intg.setFk_banda(fkBanda);
+                        intg.setVocalista(vocalista);
+                        intg.setBaterista(baterista);
+                        intg.setBaixista(guitarrista2);
+                        intg.setGuitarrista1(guitarrista);
+                        intg.setGuitarrista2(guitarrista2);        
+                    	if(Utilitarios.verificacaoDialogBox(janelaIntegrantes, "Confirmar cadastro:", null,"Error ao realizar cadastro")) {
+                    		boolean result = intg.cadastrarIntegrante();
+                    		//botaoEditar.setEnabled(true); // Habilita o botão de editar após o cadastro                    		
+                    		if(!result) { 
+                    			JOptionPane.showMessageDialog(janelaIntegrantes, "Erro ao cadastrar integrantes",
+                                        "Erro", JOptionPane.ERROR_MESSAGE);
+                    		} else {
+                    			JOptionPane.showMessageDialog(janelaIntegrantes, "Cadastro realizado com sucesso!");
+                    		}
+                    	}                                        	                                                                                                        
                     }
                 } catch (NumberFormatException erro) {
                     JOptionPane.showMessageDialog(janelaIntegrantes, "Preencha o campo 'ID da Banda' corretamente!",
@@ -126,18 +144,65 @@ public class JanelaIntegrantes {
                 }
             }
         });
+        
+        //Desativa e ativa o botão de editar
+        jTextFkBanda.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		boolean result  = false; 
+        		int id = Integer.parseInt(jTextFkBanda.getText().trim());        			
+    			result = intg.buscarIntegrantes(id);
+    			System.out.println(result);
+        		if ((!jTextFkBanda.getText().trim().isBlank()) && (result)) {        			
+        			jTextVocalista.setText(intg.getVocalista());        			
+                	jTextBaterista.setText(intg.getBaterista());
+                	jTextGuitarrista.setText(intg.getGuitarrista1());
+                	jTextGuitarrista2.setText(intg.getGuitarrista2());
+        			botaoEditar.setEnabled(true);
+        		} else {
+        			botaoEditar.setEnabled(false);
+        		}        		        		        		       		        			
+        }});
+        
+        //EDITAR
         botaoEditar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 try {
-                    int idBanda = Integer.parseInt(jTextFkBanda.getText());
+                	int fkBanda = Integer.parseInt(jTextFkBanda.getText());
                     String vocalista = jTextVocalista.getText().trim();
                     String baterista = jTextBaterista.getText().trim();
+                    //String baixista = jTextBaixista.getText().trim();
                     String guitarrista = jTextGuitarrista.getText().trim();
                     String guitarrista2 = jTextGuitarrista2.getText().trim();
-
-
-                    JOptionPane.showMessageDialog(janelaIntegrantes, "Informações do integrante editadas com sucesso! 🎸❤️");
-                    limparCampos();
+                    		
+                	if (fkBanda == 0 || vocalista.isEmpty() || baterista.isEmpty() || guitarrista.isEmpty() || guitarrista2.isEmpty()) 
+                	{
+	                    JOptionPane.showMessageDialog(janelaIntegrantes, "Preencha todos os campos antes de cadastrar!",
+	                    "Aviso", JOptionPane.WARNING_MESSAGE);	                    
+                	} else { //O CAMPO NULL É PARA INSERIR O BAIXISTA DEPOIS
+                        	intg.atualizarIntegrantes(fkBanda, vocalista, baterista, null, guitarrista, guitarrista2);
+		                    JOptionPane.showMessageDialog(janelaIntegrantes, "Informações do integrante editadas com sucesso! 🎸❤️");
+		                    botaoEditar.setEnabled(false);
+                      }		                	                       		                	                	               
+                } catch (NumberFormatException erro) {
+                    JOptionPane.showMessageDialog(janelaIntegrantes, "Preencha o campo 'ID da Banda' corretamente!",
+                            "Erro", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+        
+        //OK
+        botaoDeletar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                try {        
+                	int idBanda = Integer.parseInt(jTextFkBanda.getText());                	
+                	intg.deletarIntegrantes(idBanda);
+                    JOptionPane.showMessageDialog(janelaIntegrantes, "Integrantes deletados com sucesso! 🎸❤️");
+                    jTextFkBanda.setText("");
+                	jTextVocalista.setText("");
+                	jTextBaterista.setText("");
+                	jTextGuitarrista.setText("");
+                	jTextGuitarrista2.setText("");
+                    
                 } catch (NumberFormatException erro) {
                     JOptionPane.showMessageDialog(janelaIntegrantes, "Preencha o campo 'ID da Banda' corretamente!",
                             "Erro", JOptionPane.ERROR_MESSAGE);
@@ -154,22 +219,12 @@ public class JanelaIntegrantes {
             	jTextBaterista.setText("");
             	jTextGuitarrista.setText("");
             	jTextGuitarrista2.setText("");
-                
+            	botaoEditar.setEnabled(false);
             }
                       
         });
         
         return janelaIntegrantes;
-    }
-
-    private static void add(JLabel label) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	private static void limparCampos() {
-        // Método para limpar os campos da janela
-        // Adicione aqui a lógica para limpar os campos conforme necessário
     }
 
     public static void main(String[] args) {

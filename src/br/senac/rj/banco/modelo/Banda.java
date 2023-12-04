@@ -124,7 +124,7 @@ public class Banda {
 			}				
 			return true;
 		} catch (SQLException e) {
-			System.out.println("Erro ao atualizar banda: " + e.toString());
+			System.out.println("Erro ao pegar dados da banda: " + e.toString());
 			return false;
 		} finally {
 			if (conexao != null) { Conexao.fechaConexao(conexao);}
@@ -139,7 +139,7 @@ public class Banda {
 				conexao = Conexao.conectaBanco();
 				String sql = "INSERT INTO banda (id_banda, nome, genero, pais) values(?, ?, ?, ?)";
 				PreparedStatement ps = conexao.prepareStatement(sql);				
-				ps.setInt(1, Utilitarios.gerarId());
+				ps.setInt(1, Utilitarios.gerarId("id_banda", "banda"));
 				ps.setString(2, this.nome);
 				ps.setString(3, genero);
 				ps.setString(4, this.pais);

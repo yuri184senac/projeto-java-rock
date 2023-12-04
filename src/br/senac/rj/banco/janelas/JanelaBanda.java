@@ -149,7 +149,7 @@ public class JanelaBanda {
 								JOptionPane.showMessageDialog(janelaBanda, "Banda não cadastrada");
 							}
 						} else {
-							System.out.println("FODA!!!!");
+							System.out.println("!!!!");
 						}
 					}																				
 				} catch (Exception erro) {
@@ -162,20 +162,17 @@ public class JanelaBanda {
         botaoDeletar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				
-				if(Utilitarios.verificacaoDialogBox(janelaBanda, "Deseja realizar a ação?", "Banda Deletada!", "Ação cancelada")) {
-					banda.setNome(campoNomeBanda.getText());
-					banda.setPais(campoPais.getText());
-					Boolean result = banda.cadastrarBanda(dropdownGenero.getSelectedItem().toString());
+				if(Utilitarios.verificacaoDialogBox(janelaBanda, "Deseja realizar a ação?", null, "Ação cancelada")) {
+					String nome = campoNomeBanda.getText();
+					banda.getBanda(nome);					
+					Boolean result = banda.deletarBanda();
 					if (result) {
 						JOptionPane.showMessageDialog(janelaBanda, "Banda Deletada com sucesso!");
+						campoNomeBanda.setText("");
+		                campoPais.setText("");
+		                dropdownGenero.setSelectedItem("");
 					} 
-				}							
-				String nome = campoNomeBanda.getText();
-                banda.getBanda(nome);
-                banda.deletarBanda();
-                campoNomeBanda.setText("");
-                campoPais.setText("");
-                dropdownGenero.setSelectedItem("");                                             			
+				}											                                                                                           		
 			}
 		});
         
