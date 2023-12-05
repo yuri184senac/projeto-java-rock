@@ -1,6 +1,7 @@
 package br.senac.rj.banco.teste;
 
 
+import java.awt.Container;
 import java.awt.Dimension;
 
 import java.awt.event.ActionEvent;
@@ -21,21 +22,28 @@ import br.senac.rj.banco.janelas.JanelaListaShows;
 import br.senac.rj.banco.janelas.JanelaShow;
 
 public class TesteSwing {
-
+ 
 	public static void apresentarMenu() {
 		// -------------JANELA PRINCIPAL----------------
-		
+		//VARIAVEIS GLOBAIS
+		String path_img1 = "./src/imagem/wings.png";
+		String path_img2 = "./src/imagem/teste.gif";
 		//Background
-		ImageIcon imagemDeFundo = new ImageIcon("./src/imagem/wings.png");
+		ImageIcon imagemDeFundo = new ImageIcon(path_img1);
 		JLabel labelComBackground = new JLabel(imagemDeFundo);
 		labelComBackground.setPreferredSize(new Dimension(400, 330));
+		
+		
+        
+		
 		
 		JFrame janelaPrincipal = new JFrame("Shows de Rock"); // Janela Normal
 		janelaPrincipal.setTitle("Gestão de Bandas de Rock");
 		janelaPrincipal.setResizable(false); 
 		janelaPrincipal.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		janelaPrincipal.setSize(400, 330); // Define tamanho da janela
-		janelaPrincipal.add(labelComBackground);
+		janelaPrincipal.setSize(400, 330); // Define tamanho da janela		
+		janelaPrincipal.add(labelComBackground);				                       
+		
 		UIManager.put("OptionPane.yesButtonText", "Sim"); 
 		UIManager.put("OptionPane.noButtonText", "Não");
 		// Janela principal
