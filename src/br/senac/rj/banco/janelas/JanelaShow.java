@@ -97,7 +97,12 @@ public class JanelaShow {
         separador1.setForeground(Color.WHITE);
         separador2.setForeground(Color.WHITE);
         // Adicione os botões Cadastrar, Editar, Deletar, conforme antes
-
+        
+        JButton botaoPesquisar = new JButton("🔍");
+        botaoPesquisar.setBounds(340, 40, 60, 20);
+        arredondarBotao(botaoPesquisar);
+        janelaShow.add(botaoPesquisar);
+        
         JButton botaoCadastrar = new JButton("Cadastrar");
         botaoCadastrar.setBounds(50, 240, 100, 40);
         arredondarBotao(botaoCadastrar);
@@ -122,8 +127,18 @@ public class JanelaShow {
         //caixa.add(background);
         
         
-        // Adicione a lógica dos ActionListener para os botões conforme antes
+       
         Show show = new Show();
+        botaoPesquisar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				String nome = campoIdBanda.getText();	
+				System.out.println(nome);
+				show.getBanda(nome);										
+				campoIdBanda.setText(show.bandaNome);																		
+			}
+		});
+        
+        
         botaoCadastrar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
                 if (Utilitarios.verificacaoDialogBox(janelaShow, "Deseja confirmar a ação?", "Cadastro mal sucedido", "Ação cancelada")) {                	                 	
@@ -131,10 +146,12 @@ public class JanelaShow {
                 	String mes = campoMesData.getText();
                 	String ano =campoAnoData.getText();
                 	String sqlData = ano+"-"+mes+"-"+dia;
-                	System.out.println(sqlData);
+                	
+                	show.getBanda(campoIdBanda.getText());
                 	show.setNomeShow(campoNome.getText());            	                	                	
                 	show.setPais(campoPais.getText());
-                	show.setDate(sqlData);                	                	                	                
+                	show.setDate(sqlData);
+                	
                     // Preencha os dados do show (idBanda, nome, pais, dataShow, etc.)
                     boolean result = show.cadastrarShow();
                     if (result) {

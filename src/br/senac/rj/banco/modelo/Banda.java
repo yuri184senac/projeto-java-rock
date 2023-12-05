@@ -139,7 +139,7 @@ public class Banda {
 				conexao = Conexao.conectaBanco();
 				String sql = "INSERT INTO banda (id_banda, nome, genero, pais) values(?, ?, ?, ?)";
 				PreparedStatement ps = conexao.prepareStatement(sql);				
-				ps.setInt(1, Utilitarios.gerarId("id_banda", "banda"));
+				ps.setInt(1, Utilitarios.gerarId("banda"));
 				ps.setString(2, this.nome);
 				ps.setString(3, genero);
 				ps.setString(4, this.pais);

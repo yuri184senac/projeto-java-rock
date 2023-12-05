@@ -36,19 +36,31 @@ public class Utilitarios {
 	}
 	
 	//Gera um id aleatório
-	public static int gerarId(String column,String tabela) {
-		Random rand = new Random();		
-		boolean flag = true;
+	public static int gerarId(String tabela_nome) {
+		Random rand = new Random();	
 		int num = rand.nextInt(1,9999);
+		boolean flag = true;		
+		String sql = null;
 		Connection conexao = null;
 	    try {	    	
 	    	conexao = Conexao.conectaBanco();
-	    	do {
-	    		String sql = "SELECT ? FROM ? WHERE id_banda=?";
-				PreparedStatement ps = conexao.prepareStatement(sql);
-				ps.setString(1, column);
-				ps.setString(2, tabela);
-				ps.setInt(3, num);//verifica se tem uma banda com esse id
+	    	switch(tabela_nome) {
+	    	  case "integrantes":
+	    		  sql = "SELECT id_integrantes FROM integrantes WHERE id_integrantes=?";
+	    	    break;
+	    	  case "banda":
+	    	      sql = "SELECT id_banda FROM banda WHERE id_banda=?";
+	    	    break;
+	    	  case "shows":
+	    		  sql = "SELECT id_show FROM shows WHERE id_show=?";
+	    		break;
+	    	  default:
+	    	    System.out.println("gerarId() --> NENHUMA TABELA FOI ENCONTRADA ");
+	    	}
+	    	
+	    	do {	    			    		
+				PreparedStatement ps = conexao.prepareStatement(sql);				
+				ps.setInt(1, num);//verifica se tem uma banda com esse id
 				ResultSet result = ps.executeQuery();
 				flag = result.isFirst();
 				if (flag) { num = rand.nextInt(1,9999); }

@@ -123,7 +123,7 @@ public class Integrantes {
 				conexao = Conexao.conectaBanco();
 				String sql = "INSERT INTO integrantes (id_integrantes, id_banda, vocalista, baterista, baixista, guitarrista1, guitarrista2) values(?, ?, ?, ?, ?, ?, ?)";
 				PreparedStatement ps = conexao.prepareStatement(sql);				
-				ps.setInt(1, Utilitarios.gerarId("id_integrantes", "integrantes"));
+				ps.setInt(1, Utilitarios.gerarId("integrantes"));
 				ps.setInt(2, this.fk_banda);
 				ps.setString(3, this.vocalista);
 				ps.setString(4, this.baterista);
