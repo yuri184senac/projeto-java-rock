@@ -85,7 +85,7 @@ public class JanelaIntegrantes {
         botaoCadastrar.setBounds(50, 240, 100, 30);
         janelaIntegrantes.add(botaoCadastrar);
 
-        JButton botaoEditar = new JButton("Editar");
+        JButton botaoEditar = new JButton("Atualizar");
         botaoEditar.setBounds(160, 240, 100, 30);
         janelaIntegrantes.add(botaoEditar);
        
