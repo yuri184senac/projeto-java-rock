@@ -215,7 +215,10 @@ public class JanelaShow {
             public void actionPerformed(ActionEvent arg0) {
                 campoNomeBanda.setText("");
                 campoNome.setText("");
-                campoPais.setText("");               
+                campoPais.setText(""); 
+                campoDiaData.setText("");
+            	campoMesData.setText("");
+            	campoAnoData.setText("");
             }
         });
 

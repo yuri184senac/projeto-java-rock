@@ -50,9 +50,9 @@ public class JanelaListaShows extends JFrame {
         tabela.setBackground(new Color(194,  117, 0));
         // Adiciona colunas ao modelo
         modelo.addColumn("Banda");
-        modelo.addColumn("Nome do Show");      
-        modelo.addColumn("Pais");
-        modelo.addColumn("Data do Show");
+        modelo.addColumn("Festival");      
+        modelo.addColumn("Local");
+        modelo.addColumn("Data");
         // Obtém dados do banco de dados
         obterDadosDoBanco();
 
@@ -94,7 +94,7 @@ public class JanelaListaShows extends JFrame {
                 String nome_banda = rs.getString("nome");
                 String nome = rs.getString("s.nome");
                 Date data = rs.getDate("data_do_show");
-                String pais = rs.getString("pais");                
+                String pais = rs.getString("s.pais");                
                 //Formatando data
                 SimpleDateFormat f = new SimpleDateFormat("dd/MM/yyyy");
                 f.setTimeZone(TimeZone.getTimeZone("UTC"));

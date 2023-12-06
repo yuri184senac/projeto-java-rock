@@ -13,6 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 
@@ -108,9 +109,14 @@ public class TesteSwing {
 		
 		subMenuListarShow.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				janelaListaShows = new JanelaListaShows(janelaPrincipal);
-				janelaListaShows.setEnabled(true);
-			}
+				try {
+					janelaListaShows = new JanelaListaShows(janelaPrincipal);
+					janelaListaShows.setEnabled(true);
+				
+				} catch (Exception erro) {
+					 JOptionPane.showMessageDialog(janelaBanda, "Não foi possível se conectar ao banco de dados","Error",JOptionPane.ERROR_MESSAGE);
+                }
+			} 			
 		});
 		
 		//JANELA PRINCIPAL

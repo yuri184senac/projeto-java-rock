@@ -8,14 +8,15 @@ import java.sql.SQLException;
 
 import br.senac.rj.banco.service.Utilitarios;
 
-public class Integrantes {
+public class Integrantes {	
 	private int id_integrantes;
 	private int fk_banda;
+	private String nome_banda;
 	private String vocalista;
 	private String baterista;
 	private String baixista;
 	private String guitarrista1;
-	private String guitarrista2;
+
 	//REVER LOGICA
 	/*VERIFICA REGISTRO DE INTEGRANTES*/
 	public int getId_integrantes() {
@@ -30,6 +31,14 @@ public class Integrantes {
 	public void setFk_banda(int fk_banda) {
 		this.fk_banda = fk_banda;
 	}
+	
+	public String getNome_banda() {
+		return nome_banda;
+	}
+	public void setNome_banda(String nome_banda) {
+		this.nome_banda = nome_banda;
+	}
+	
 	public String getVocalista() {
 		return vocalista;
 	}
@@ -54,27 +63,45 @@ public class Integrantes {
 	public void setGuitarrista1(String guitarrista1) {
 		this.guitarrista1 = guitarrista1;
 	}
-	public String getGuitarrista2() {
-		return guitarrista2;
+	
+	//transforma o nome da banda para id_banda
+	private int getIdBandaByName(String nome_banda) {
+		int id_banda = -1;
+		Connection conexao = null;
+		try {			
+			conexao = Conexao.conectaBanco();
+			String sql =  "SELECT id_banda FROM banda WHERE nome LIKE '%"+nome_banda+"%'";
+			PreparedStatement ps = conexao.prepareStatement(sql);						
+			ResultSet rs = ps.executeQuery();						
+			while (rs.next()) {
+				id_banda = rs.getInt("id_banda");
+			}		
+			return id_banda;
+		} catch (SQLException e) {
+			System.out.println("Erro ao cadastrar banda: " + e.toString());
+			return -1;
+		}finally {
+			if (conexao != null) { Conexao.fechaConexao(conexao); }
+		}
 	}
-	public void setGuitarrista2(String guitarrista2) {
-		this.guitarrista2 = guitarrista2;
-	}
+	
+	
 	
 	private boolean verificarSeExiste(int id_banda) {		  
 		Connection conexao = null;
 		try {			
+			System.out.println(id_banda);
 			conexao = Conexao.conectaBanco();
 			String sql = "SELECT id_banda FROM integrantes WHERE id_banda=?";
 			PreparedStatement ps = conexao.prepareStatement(sql);			
 			ps.setInt(1, id_banda);
 			ResultSet rs = ps.executeQuery();
 			if (!rs.isBeforeFirst()) { //Verifica se não está antes do primeiro registro
-				System.out.println("verificarBanda() --> Integrante não existe");				
-				return true;
+				System.out.println("verificarBanda() --> Integrantes da banda não existem");				
+				return false; //BANDA NÃO TEM INTEGRANTES
 			} else {				
-				System.out.println("verificarBanda() --> Integrante já existe");
-				return false;
+				System.out.println("verificarBanda() --> Integrantes da banda existem");
+				return true; //BANDA TEM INTEGRANTES
 			}
 		} catch (SQLException e) {
 			System.out.println("Erro ao cadastrar banda: " + e.toString());
@@ -84,30 +111,31 @@ public class Integrantes {
 		}
 	}
 	
-	//GET 
-	public boolean buscarIntegrantes(int id) {
+	//GET
+	
+	//PAREI AQUI!
+	public boolean buscarIntegrantes(String nome_banda) {
 		Connection conexao = null;
-		try {			
+		
+		try {						
+			int id_banda = this.getIdBandaByName(nome_banda);
 			conexao = Conexao.conectaBanco();
-			String sql =  "SELECT * FROM integrantes WHERE id_banda ='"+id+"'";
-			PreparedStatement ps = conexao.prepareStatement(sql);			
-			ResultSet rs = ps.executeQuery();
-			if (!verificarSeExiste(id)) {
-				while (rs.next()) {
-					this.id_integrantes = rs.getInt("id_integrantes");
-					this.fk_banda = rs.getInt("id_banda");
-					this.vocalista = rs.getString("vocalista");
-					this.baterista = rs.getString("baterista");
-					this.baixista = rs.getString("baixista");
-					this.guitarrista1 = rs.getString("guitarrista1");
-					this.guitarrista2 = rs.getString("guitarrista2");
-				}
-				return true;
-			} else {
-				return false;
-			}
-					
-			
+			System.out.println(id_banda);
+			String sql1 = "SELECT * FROM `banda` b LEFT JOIN `integrantes` i ON b.id_banda=i.id_banda WHERE b.id_banda=?";	
+			PreparedStatement ps = conexao.prepareStatement(sql1);
+			ps.setInt(1, id_banda);
+			ResultSet rs = ps.executeQuery();			
+					while (rs.next()) {
+						this.id_integrantes = rs.getInt("id_integrantes");
+						this.nome_banda = rs.getString("b.nome");
+						this.fk_banda = rs.getInt("id_banda");
+						this.vocalista = rs.getString("vocalista");
+						this.baterista = rs.getString("baterista");					
+						this.guitarrista1 = rs.getString("guitarrista1");
+						this.baixista = rs.getString("baixista");						
+					}
+					return true;
+																												
 		} catch (SQLException e) {
 			System.out.println("Erro ao consultar integrantes: " + e.toString());
 			return false;
@@ -121,15 +149,14 @@ public class Integrantes {
 		Connection conexao = null;
 		try {			
 				conexao = Conexao.conectaBanco();
-				String sql = "INSERT INTO integrantes (id_integrantes, id_banda, vocalista, baterista, baixista, guitarrista1, guitarrista2) values(?, ?, ?, ?, ?, ?, ?)";
+				String sql = "INSERT INTO integrantes (id_integrantes, id_banda, vocalista, baterista, guitarrista1, baixista) values(?, ?, ?, ?, ?, ?)";
 				PreparedStatement ps = conexao.prepareStatement(sql);				
 				ps.setInt(1, Utilitarios.gerarId("integrantes"));
 				ps.setInt(2, this.fk_banda);
 				ps.setString(3, this.vocalista);
-				ps.setString(4, this.baterista);
-				ps.setString(5, this.baixista);
-				ps.setString(6, this.guitarrista1);
-				ps.setString(7, this.guitarrista2);
+				ps.setString(4, this.baterista);			
+				ps.setString(5, this.guitarrista1);	
+				ps.setString(6, this.baixista);
 				return Utilitarios.verificarRegistro(ps, "Integrantes cadastrados com sucesso!", "Integrantes cadastrados sem sucesso");						
 		}  catch (SQLException e) {
 			System.out.println("Erro ao cadastrar banda: " + e.toString());
@@ -144,22 +171,20 @@ public class Integrantes {
 	public boolean atualizarIntegrantes(			
 			int id,
 			String vocalista,
-			String baterista,
-			String baixista,
+			String baterista,		
 			String guitarrista1,
-			String guitarrista2
+			String baixista
 	) {		
 		Connection conexao = null;
 		try {											
 			conexao = Conexao.conectaBanco();
-			String sql = "UPDATE integrantes SET vocalista=?, baterista=?, baixista=?, guitarrista1=?, guitarrista2=? WHERE id_banda=?";
+			String sql = "UPDATE integrantes SET vocalista=?, baterista=?, guitarrista1=?, baixista=? WHERE id_banda=?";
 			PreparedStatement ps = conexao.prepareStatement(sql);		
 			ps.setString(1, vocalista);
-			ps.setString(2, baterista);
-			ps.setString(3, null);
-			ps.setString(4, guitarrista1);
-			ps.setString(5, guitarrista2);
-			ps.setInt(6, id);
+			ps.setString(2, baterista);		
+			ps.setString(3, guitarrista1);
+			ps.setString(4, baixista);
+			ps.setInt(5, id);
 			return Utilitarios.verificarRegistro(ps, "Atualização realizada", "Atualização não realizada");									
 		} catch (SQLException e) {
 			System.out.println("Erro ao atualizar integrantes: " + e.toString());
@@ -185,4 +210,5 @@ public class Integrantes {
 			if (conexao != null) { Conexao.fechaConexao(conexao);}
 		}		
 	}
+	
 }
