@@ -2,6 +2,7 @@ package br.senac.rj.banco.janelas;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
@@ -12,6 +13,7 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.TimeZone;
 
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -39,6 +41,7 @@ public class JanelaListaShows extends JFrame {
         
        
         
+        
         // Inicializa o modelo da tabela
         modelo = new DefaultTableModel();
         tabela = new JTable(modelo);
@@ -64,12 +67,14 @@ public class JanelaListaShows extends JFrame {
                 obterDadosDoBanco();
             }
         });
-
+        arredondarBotao(btnAtualizar);
+        
         // Adiciona o botão de atualização ao painel de botões
         JPanel painelBotoes = new JPanel();
         painelBotoes.add(btnAtualizar);
         getContentPane().add(painelBotoes, BorderLayout.SOUTH);
-
+        
+        
         // Exibe a janela
         setVisible(true);
     }
@@ -104,6 +109,21 @@ public class JanelaListaShows extends JFrame {
         } catch (SQLException e) {
             System.out.println("Erro ao obter dados do show: " + e.toString());
         }
+    }
+    private static void arredondarBotao(JButton botao) {
+        int tamanhoBorda = 5;
+
+        botao.setBorder(BorderFactory.createEmptyBorder(tamanhoBorda, tamanhoBorda, tamanhoBorda, tamanhoBorda));
+        botao.setBackground(Color.decode("#c27500"));
+        botao.setForeground(Color.WHITE); // Cor do texto
+        botao.setContentAreaFilled(true); //Permite aparecer a cor
+
+        botao.addActionListener(new ActionListener() {
+            @Override // ActionListener É PAI do actionPerformed
+            public void actionPerformed(ActionEvent e) {
+                // Lógica do botão
+            }
+        });
     }
 
     public static void main(String[] args) {
