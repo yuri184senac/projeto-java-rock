@@ -65,12 +65,13 @@ public class Integrantes {
 	}
 	
 	//transforma o nome da banda para id_banda
-	private int getIdBandaByName(String nome_banda) {
+	private int getIdBandaByName(String nome_banda, boolean delete) {
 		int id_banda = -1;
 		Connection conexao = null;
 		try {			
-			conexao = Conexao.conectaBanco();
+			conexao = Conexao.conectaBanco();			
 			String sql =  "SELECT id_banda FROM banda WHERE nome LIKE '%"+nome_banda+"%'";
+			if(delete) { sql =  "SELECT * FROM banda WHERE nome="+nome_banda+""; }
 			PreparedStatement ps = conexao.prepareStatement(sql);						
 			ResultSet rs = ps.executeQuery();						
 			while (rs.next()) {
@@ -118,7 +119,7 @@ public class Integrantes {
 		Connection conexao = null;
 		
 		try {						
-			int id_banda = this.getIdBandaByName(nome_banda);
+			int id_banda = this.getIdBandaByName(nome_banda, false);
 			conexao = Conexao.conectaBanco();
 			System.out.println(id_banda);
 			String sql1 = "SELECT * FROM `banda` b LEFT JOIN `integrantes` i ON b.id_banda=i.id_banda WHERE b.id_banda=?";	
@@ -169,14 +170,15 @@ public class Integrantes {
 	
 	//EDITAR
 	public boolean atualizarIntegrantes(			
-			int id,
+			String nome_banda,
 			String vocalista,
 			String baterista,		
 			String guitarrista1,
 			String baixista
 	) {		
 		Connection conexao = null;
-		try {											
+		try {		
+			int id = this.getIdBandaByName(nome_banda, false);
 			conexao = Conexao.conectaBanco();
 			String sql = "UPDATE integrantes SET vocalista=?, baterista=?, guitarrista1=?, baixista=? WHERE id_banda=?";
 			PreparedStatement ps = conexao.prepareStatement(sql);		
@@ -193,11 +195,13 @@ public class Integrantes {
 			if (conexao != null) { Conexao.fechaConexao(conexao);}
 		}			
 	}
+	
 	//EXCLUIR
-	/*EXCLUIR*/
-	public boolean deletarIntegrantes(int id) {
+	public boolean deletarIntegrantes(String nome_banda) {
+		
 		Connection conexao = null;
 		try {
+			int id = this.getIdBandaByName(nome_banda, true);
 			conexao = Conexao.conectaBanco();
 			String sql = "DELETE i FROM integrantes i LEFT JOIN banda b ON i.id_banda=?";
 			PreparedStatement ps = conexao.prepareStatement(sql);

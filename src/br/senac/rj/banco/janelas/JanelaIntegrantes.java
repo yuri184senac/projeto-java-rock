@@ -129,10 +129,8 @@ public class JanelaIntegrantes {
         botaoPesquisar.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		boolean result  = false; 
-        		String nome_banda = jTextFkBanda.getText();  
-        		
-    			result = intg.buscarIntegrantes(nome_banda); // TRABALHANDO AQUI
-    			System.out.println(result);
+        		String nome_banda = jTextFkBanda.getText();          		
+    			result = intg.buscarIntegrantes(nome_banda); // TRABALHANDO AQUI    			
         		if ((!jTextFkBanda.getText().trim().isBlank()) && (result)) {   
         			jTextFkBanda.setText(intg.getNome_banda()); 
         			jTextVocalista.setText(intg.getVocalista());        			
@@ -191,18 +189,18 @@ public class JanelaIntegrantes {
         botaoEditar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 try {
-                	int fkBanda = Integer.parseInt(jTextFkBanda.getText());
+                	String nBanda = jTextFkBanda.getText();
                     String vocalista = jTextVocalista.getText().trim();
                     String baterista = jTextBaterista.getText().trim();                   
                     String guitarrista = jTextGuitarrista.getText().trim();
                     String baixista = jTextBaixista.getText().trim();
                     		
-                	if (fkBanda == 0 || vocalista.isEmpty() || baterista.isEmpty() || guitarrista.isEmpty() || baixista.isEmpty()) 
+                	if (nBanda.isEmpty() || vocalista.isEmpty() || baterista.isEmpty() || guitarrista.isEmpty() || baixista.isEmpty()) 
                 	{
 	                    JOptionPane.showMessageDialog(janelaIntegrantes, "Preencha todos os campos antes de cadastrar!",
 	                    "Aviso", JOptionPane.WARNING_MESSAGE);	                    
                 	} else { //O CAMPO NULL É PARA INSERIR O BAIXISTA DEPOIS
-                        	intg.atualizarIntegrantes(fkBanda, vocalista, baterista, guitarrista, baixista);
+                        	intg.atualizarIntegrantes(nBanda, vocalista, baterista, guitarrista, baixista);
 		                    JOptionPane.showMessageDialog(janelaIntegrantes, "Informações do integrante editadas com sucesso! 🎸❤️");
 		                    botaoEditar.setEnabled(false);
                       }		                	                       		                	                	               
@@ -217,8 +215,8 @@ public class JanelaIntegrantes {
         botaoDeletar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 try {        
-                	int idBanda = Integer.parseInt(jTextFkBanda.getText());                	
-                	intg.deletarIntegrantes(idBanda);
+                	String nBanda = jTextFkBanda.getText();                	
+                	intg.deletarIntegrantes(nBanda);
                     JOptionPane.showMessageDialog(janelaIntegrantes, "Integrantes deletados com sucesso! 🎸❤️");
                     jTextFkBanda.setText("");
                 	jTextVocalista.setText("");
