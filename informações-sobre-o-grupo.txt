@@ -1,0 +1,10 @@
+Professor: Reinaldo José de Freitas
+
+Unidade Curricular:  Programação I
+
+Alunos: Matheus Viana, Milena Daflon, Yuri Roliz
+Módulo: 2
+Semestre letivo: 2023.2
+
+
+Projeto Java Rock -  Gestão de Banda
