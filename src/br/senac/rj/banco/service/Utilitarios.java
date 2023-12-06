@@ -11,7 +11,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Random;
 
-import javax.swing.JButton;
 
 public class Utilitarios {
 	//Spawna uma caixa de mensagem de confirmação da ação a ser realizada.
@@ -89,13 +88,6 @@ public class Utilitarios {
 			return false;
 		}	
 	}
-	
-	
-	
-	
-	public static void habilitarBotao(JButton botao, boolean flag) {
-		botao.setEnabled(flag);				
-	}
-	
-	
+		
+		
 }

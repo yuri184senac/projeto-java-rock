@@ -1,13 +1,8 @@
 package br.senac.rj.banco.modelo;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
-import java.util.Random;
-
 import br.senac.rj.banco.service.Utilitarios;
 
 
@@ -109,11 +104,13 @@ public class Banda {
 	*---------------------------------------*/
 	
 	
-	public boolean getBanda(String nome) {
+	public boolean getBanda(String nome, boolean delete) {
 		Connection conexao = null;
-		try {			
+		try {
 			conexao = Conexao.conectaBanco();
+			
 			String sql =  "SELECT * FROM banda WHERE nome LIKE '%"+nome+"%'";
+			if(delete) { sql =  "SELECT * FROM banda WHERE nome="+nome+""; }											
 			PreparedStatement ps = conexao.prepareStatement(sql);			
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {

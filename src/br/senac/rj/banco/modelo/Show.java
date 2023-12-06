@@ -5,10 +5,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+
+
 import br.senac.rj.banco.service.Utilitarios;
 
 public class Show {
-	public String bandaNome;
+	
     private int idShow;
     private int idBanda;
     private String nomeShow; 
@@ -65,20 +67,43 @@ public class Show {
         this.pais = pais;
     }
     
-    //Pegar id da banda pelo nome
-    public String getBanda(String nome) {
-    	
-		Connection conexao = null;
+    
+    //CONSULTAR
+    /**public boolean obterShowsPorDataRecente() {
+    	Connection conexao = null;
 		try {			
+			conexao = Conexao.conectaBanco();
+			String sql =  "SELECT * FROM show";
+			PreparedStatement ps = conexao.prepareStatement(sql);			
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				Show show
+			}						
+			
+		} catch (SQLException e) {
+			System.out.println("Erro ao pegar dados da banda: " + e.toString());
+			
+		} finally {			
+			if (conexao != null) { Conexao.fechaConexao(conexao);}			
+		}		
+	}**/
+    	
+    
+    
+    //Pegar id da banda pelo nome
+    public Banda getBanda(String nome) {    	
+		Connection conexao = null;
+		try {	
+			Banda banda = new Banda();
 			conexao = Conexao.conectaBanco();
 			String sql =  "SELECT id_banda, nome FROM banda WHERE nome LIKE '%"+nome+"%'";
 			PreparedStatement ps = conexao.prepareStatement(sql);			
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
-				this.idBanda = rs.getInt("id_banda");
-				bandaNome = rs.getString("nome");
+				banda.setId_banda(rs.getInt("id_banda")); 
+				banda.setNome(rs.getString("nome"));			   
 			}						
-			return bandaNome;
+			return banda;
 		} catch (SQLException e) {
 			System.out.println("Erro ao pegar dados da banda: " + e.toString());
 			return null;
@@ -86,7 +111,9 @@ public class Show {
 			if (conexao != null) { Conexao.fechaConexao(conexao);}			
 		}		
 	}
-        
+    
+    // Retornar dados show
+    
     // Cadastrar
     public boolean cadastrarShow() {
         Connection conexao = null;
@@ -115,11 +142,12 @@ public class Show {
         Connection conexao = null;
         try {
             conexao = Conexao.conectaBanco();
-            String sql = "UPDATE shows SET id_banda=?, cidade=?, pais=? WHERE id_show=?";
+            String sql = "UPDATE shows SET id_banda=?, pais=?, data_do_show=? WHERE id_show=?";
             PreparedStatement ps = conexao.prepareStatement(sql);
             ps.setInt(1, this.idBanda);        
             ps.setString(2, this.pais);
-            ps.setInt(3, this.idShow);
+            ps.setString(3, this.date);
+            ps.setInt(4, this.idShow);
 
             return Utilitarios.verificarRegistro(ps, "Show atualizado com sucesso!", "Erro ao atualizar show");
         } catch (SQLException e) {
@@ -140,7 +168,6 @@ public class Show {
             String sql = "DELETE FROM shows WHERE id_show=?";
             PreparedStatement ps = conexao.prepareStatement(sql);
             ps.setInt(1, this.idShow);
-
             return Utilitarios.verificarRegistro(ps, "Show deletado com sucesso!", "Erro ao deletar show");
         } catch (SQLException e) {
             System.out.println("Erro ao deletar show: " + e.toString());

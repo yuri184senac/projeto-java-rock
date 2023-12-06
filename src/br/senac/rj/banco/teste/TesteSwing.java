@@ -22,12 +22,11 @@ import br.senac.rj.banco.janelas.JanelaListaShows;
 import br.senac.rj.banco.janelas.JanelaShow;
 
 public class TesteSwing {
- 
+	private static 	JanelaListaShows janelaListaShows;
 	public static void apresentarMenu() {
 		// -------------JANELA PRINCIPAL----------------
 		//VARIAVEIS GLOBAIS
-		String path_img1 = "./src/imagem/wings.png";
-		String path_img2 = "./src/imagem/teste.gif";
+		String path_img1 = "./src/imagem/wings2.png";		
 		//Background
 		ImageIcon imagemDeFundo = new ImageIcon(path_img1);
 		JLabel labelComBackground = new JLabel(imagemDeFundo);
@@ -76,7 +75,7 @@ public class TesteSwing {
 		//-------------------SHOW---------------------------
 		//Janela Show		 	
 		JFrame janelaShow = JanelaShow.criarJanelaShow();
-		JFrame janelaListaShow = JanelaListaShows.criarJanelaListaShows();
+		
 		//Menu Show		
 		JMenu menuShow = new JMenu("Show");
 		menuBar.add(menuShow);
@@ -109,8 +108,8 @@ public class TesteSwing {
 		
 		subMenuListarShow.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				janelaListaShow.setVisible(true);
-				
+				janelaListaShows = new JanelaListaShows(janelaPrincipal);
+				janelaListaShows.setEnabled(true);
 			}
 		});
 		

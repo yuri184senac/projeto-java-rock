@@ -7,6 +7,8 @@ import java.awt.event.ActionListener;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -28,6 +30,13 @@ public class JanelaIntegrantes {
         janelaIntegrantes.setSize(400, 330);
         janelaIntegrantes.getContentPane().setBackground(Color.decode("#282829"));
                
+      //IMAGEM DE BACKGROUND
+        ImageIcon icon = new ImageIcon("./src/imagem/integrantes-bk.gif");
+        JLabel background = new JLabel(icon);
+        background.setSize(440, 300);
+        background.setBounds(0,  0, 440, 300);
+        //FIM-IMAGEM-DE-BACKGROUND
+        
         
         //Organizar os campos na tela integrantes
         Container caixa = janelaIntegrantes.getContentPane();
@@ -39,7 +48,7 @@ public class JanelaIntegrantes {
         JLabel labelVocalista = new JLabel("Vocalista 🎙️:");
         JLabel labelBaterista = new JLabel("Baterista 🎵:");
         JLabel labelGuitarrista = new JLabel("Guitarrista 🎸:");
-        JLabel labelGuitarrista2 = new JLabel("2° Guitarrista 🎻:");     
+        JLabel labelGuitarrista2 = new JLabel("Baixista 🎻:");     
         
         //Fonte Branco
         labelFkBanda.setForeground(Color.WHITE);
@@ -82,26 +91,33 @@ public class JanelaIntegrantes {
 
         // Define botões e a localização deles na janela
         JButton botaoCadastrar = new JButton("Cadastrar");
-        botaoCadastrar.setBounds(50, 240, 100, 30);
+        botaoCadastrar.setBounds(50, 240, 100, 30);        
         janelaIntegrantes.add(botaoCadastrar);
-
+        arredondarBotao(botaoCadastrar);
+        
         JButton botaoEditar = new JButton("Atualizar");
         botaoEditar.setBounds(160, 240, 100, 30);
         janelaIntegrantes.add(botaoEditar);
+        arredondarBotao(botaoEditar);
        
         JButton botaoLimpar = new JButton("Limpar");
         botaoLimpar.setBounds(250, 40, 100, 20);
         janelaIntegrantes.add(botaoLimpar);
+        arredondarBotao(botaoLimpar);
 
         JButton botaoDeletar = new JButton("Deletar");
         // Corrigi as coordenadas do botão "Deletar" para ficar ao lado do botão "Editar"
         botaoDeletar.setBounds(270, 240, 100, 30);
         janelaIntegrantes.add(botaoDeletar);
+        arredondarBotao(botaoDeletar);
         
         //BOTOES
         botaoEditar.setEnabled(false);
         
-        //INSTANCIA
+        //BACKGROUND
+        caixa.add(background);
+        
+       
         Integrantes intg = new Integrantes();
         //Botao após clicar no cadastrar
         //OK - FALTA O BAIXISTA
@@ -225,6 +241,21 @@ public class JanelaIntegrantes {
         });
         
         return janelaIntegrantes;
+    }
+    private static void arredondarBotao(JButton botao) {
+        int tamanhoBorda = 5;
+
+        botao.setBorder(BorderFactory.createEmptyBorder(tamanhoBorda, tamanhoBorda, tamanhoBorda, tamanhoBorda));
+        botao.setBackground(Color.decode("#c27500"));
+        botao.setForeground(Color.WHITE); // Cor do texto
+        botao.setContentAreaFilled(true); //Permite aparecer a cor
+
+        botao.addActionListener(new ActionListener() {
+            @Override // ActionListener É PAI do actionPerformed
+            public void actionPerformed(ActionEvent e) {
+                // Lógica do botão
+            }
+        });
     }
 
     public static void main(String[] args) {

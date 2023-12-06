@@ -14,7 +14,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
-
+import br.senac.rj.banco.modelo.Banda;
 import br.senac.rj.banco.modelo.Show;
 import br.senac.rj.banco.service.Utilitarios;
 
@@ -26,12 +26,12 @@ public class JanelaShow {
         janelaShow.setResizable(false);
         janelaShow.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         janelaShow.setSize(440, 325);
-        janelaShow.getContentPane().setBackground(Color.decode("#282829"));
+        janelaShow.getContentPane().setBackground(Color.decode("#100039"));
         //IMAGEM DE BACKGROUND
-        //ImageIcon icon = new ImageIcon("./src/imagem/teste.gif");
-        //JLabel background = new JLabel(icon);
-        //background.setSize(440, 300);
-        //background.setBounds(1, -20, 440, 300);
+        ImageIcon icon = new ImageIcon("./src/imagem/show-bk.gif");
+        JLabel background = new JLabel(icon);
+        background.setSize(440, 300);
+        background.setBounds(0, 0, 440, 300);
         //FIM-IMAGEM-DE-BACKGROUND
         
         Container caixa = janelaShow.getContentPane();
@@ -42,8 +42,8 @@ public class JanelaShow {
         // ID Banda
         JLabel labelIdBanda = new JLabel("Nome da banda:");
         labelIdBanda.setBounds(50, 40, 120, 20);
-        JTextField campoIdBanda = new JTextField();
-        campoIdBanda.setBounds(180, 40, 150, 20);
+        JTextField campoNomeBanda = new JTextField();
+        campoNomeBanda.setBounds(180, 40, 150, 20);
 
         // Nome
         JLabel labelNome = new JLabel("Nome do show:");
@@ -77,7 +77,7 @@ public class JanelaShow {
                
 
         caixa.add(labelIdBanda);
-        caixa.add(campoIdBanda);
+        caixa.add(campoNomeBanda);
         caixa.add(labelNome);
         caixa.add(campoNome);
         caixa.add(labelPais);
@@ -123,31 +123,35 @@ public class JanelaShow {
         arredondarBotao(botaoLimpar);
         janelaShow.add(botaoLimpar);
         
+        //BOTOES
+        botaoEditar.setEnabled(false);
+        
         //BACKGROUND
-        //caixa.add(background);
+        caixa.add(background);               
         
-        
-       
         Show show = new Show();
         botaoPesquisar.addActionListener(new ActionListener() {
+        	Banda banda = new Banda();
 			public void actionPerformed(ActionEvent arg0) {
-				String nome = campoIdBanda.getText();	
-				System.out.println(nome);
-				show.getBanda(nome);										
-				campoIdBanda.setText(show.bandaNome);																		
+				String nome = campoNomeBanda.getText();					
+				banda = show.getBanda(nome);
+				campoNomeBanda.setText(banda.getNome());					
 			}
 		});
-        
-        
+                
         botaoCadastrar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
-                if (Utilitarios.verificacaoDialogBox(janelaShow, "Deseja confirmar a ação?", "Cadastro mal sucedido", "Ação cancelada")) {                	                 	
+                if (Utilitarios.verificacaoDialogBox(janelaShow, "Deseja confirmar a ação?", null, "Ação cancelada")) {                	                 	
+                	
+                	
                 	String dia = campoDiaData.getText();
                 	String mes = campoMesData.getText();
                 	String ano =campoAnoData.getText();
                 	String sqlData = ano+"-"+mes+"-"+dia;
                 	
-                	show.getBanda(campoIdBanda.getText());
+                	
+                	Banda banda = show.getBanda(campoNomeBanda.getText());
+                	show.setIdBanda(banda.getId_banda());                	
                 	show.setNomeShow(campoNome.getText());            	                	                	
                 	show.setPais(campoPais.getText());
                 	show.setDate(sqlData);
@@ -165,8 +169,38 @@ public class JanelaShow {
 
         botaoEditar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
-                // Adicione lógica para editar o show
-                // Utilize a lógica semelhante à do cadastro, mas para a edição
+            	try {
+            		Banda banda = new Banda();
+            		if (Utilitarios.verificacaoDialogBox(janelaShow, "Deseja confirmar a ação?", null, "Ação cancelada")) {            			
+            			//DATA
+            			String dia = campoDiaData.getText();
+                    	String mes = campoMesData.getText();
+                    	String ano =campoAnoData.getText();
+                    	String sqlData = ano+"-"+mes+"-"+dia;
+                    	banda = show.getBanda(campoNomeBanda.getText());//Pega o id da banda através do nome
+                    	//GRAVA OS DADOS NO OBJETO
+                    	show.setIdBanda(banda.getId_banda());                    	
+                    	show.setNomeShow(campoNome.getText());            	                	                	
+                    	show.setPais(campoPais.getText());
+                    	show.setDate(sqlData);
+                    	//GRAVA OS DADOS NO BANCO
+                    	show.editarShow();
+            		}    		
+            		/*if ( == 0 || vocalista.isEmpty() || baterista.isEmpty() || guitarrista.isEmpty() || guitarrista2.isEmpty()) 
+                    	{
+    	                    JOptionPane.showMessageDialog(janelaIntegrantes, "Preencha todos os campos antes de cadastrar!",
+    	                    "Aviso", JOptionPane.WARNING_MESSAGE);	                    
+                    	} else { //O CAMPO NULL É PARA INSERIR O BAIXISTA DEPOIS
+                            	intg.atualizarIntegrantes(fkBanda, vocalista, baterista, null, guitarrista, guitarrista2);
+    		                    JOptionPane.showMessageDialog(janelaIntegrantes, "Informações do integrante editadas com sucesso! 🎸❤️");
+    		                    botaoEditar.setEnabled(false);
+                    	}		                	                       		         
+            		}*/
+                	       	                	               
+                } catch (NumberFormatException erro) {
+                    JOptionPane.showMessageDialog(janelaShow, "Preencha o campo 'ID da Banda' corretamente!",
+                            "Erro", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
 
@@ -179,10 +213,9 @@ public class JanelaShow {
         
         botaoLimpar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
-                campoIdBanda.setText("");
+                campoNomeBanda.setText("");
                 campoNome.setText("");
-                campoPais.setText("");
-               
+                campoPais.setText("");               
             }
         });
 
@@ -194,8 +227,8 @@ public class JanelaShow {
         int tamanhoBorda = 5;
 
         botao.setBorder(BorderFactory.createEmptyBorder(tamanhoBorda, tamanhoBorda, tamanhoBorda, tamanhoBorda));
-        botao.setBackground(Color.ORANGE);
-        botao.setForeground(Color.BLACK); // Cor do texto
+        botao.setBackground(Color.decode("#c27500"));
+        botao.setForeground(Color.WHITE); // Cor do texto
         botao.setContentAreaFilled(true); //Permite aparecer a cor
 
         botao.addActionListener(new ActionListener() {
@@ -205,8 +238,5 @@ public class JanelaShow {
             }
         });
     }
-    
-   
-    
-   
+  
 }
