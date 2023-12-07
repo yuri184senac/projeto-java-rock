@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 04/12/2023 às 21:43
+-- Tempo de geração: 07/12/2023 às 05:26
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.0.30
 
@@ -34,13 +34,6 @@ CREATE TABLE `banda` (
   `pais` varchar(30) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Despejando dados para a tabela `banda`
---
-
-INSERT INTO `banda` (`id_banda`, `nome`, `genero`, `pais`) VALUES
-(5055, 'Iron Maiden', 'POWER METAL', 'Inglaterra');
-
 -- --------------------------------------------------------
 
 --
@@ -52,17 +45,9 @@ CREATE TABLE `integrantes` (
   `id_banda` int(11) DEFAULT NULL,
   `vocalista` varchar(50) DEFAULT NULL,
   `baterista` varchar(50) DEFAULT NULL,
-  `baixista` varchar(50) DEFAULT NULL,
   `guitarrista1` varchar(50) DEFAULT NULL,
-  `guitarrista2` varchar(50) DEFAULT NULL
+  `baixista` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Despejando dados para a tabela `integrantes`
---
-
-INSERT INTO `integrantes` (`id_integrantes`, `id_banda`, `vocalista`, `baterista`, `baixista`, `guitarrista1`, `guitarrista2`) VALUES
-(7846, 5055, 'Brucke', 'Fulano', NULL, 'Beltrano2', 'Ciclano');
 
 -- --------------------------------------------------------
 
