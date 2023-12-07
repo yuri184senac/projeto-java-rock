@@ -79,15 +79,12 @@ public class Utilitarios {
 	public static boolean verificarRegistro(PreparedStatement ps, String msgSucces, String msgError) {
 		try {
 			int totalRegistrosAfetados = ps.executeUpdate();
-			if (!(totalRegistrosAfetados == 0)) { 
-				System.out.println(msgSucces);				
+			if (!(totalRegistrosAfetados == 0)) { 					
 				return true; 
-			} else {
-				System.out.println(msgError);
+			} else {				
 				return false;		
 			}
-		} catch (SQLException e) {
-			System.out.println("Erro ao verificar registro no banco" +e.toString());
+		} catch (SQLException e) {			
 			return false;
 		}	
 	}

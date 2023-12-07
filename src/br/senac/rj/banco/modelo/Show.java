@@ -90,15 +90,13 @@ public class Show {
 			ps.setString(2, nome_show);
 			ps.setInt(3, id_banda);
 			ResultSet rs = ps.executeQuery();
-			if (rs.isBeforeFirst()) { //Verifica se não está antes do primeiro registro
-				System.out.println("verificarShow() --> Show não existe");
+			if (rs.isBeforeFirst()) { //Verifica se não está antes do primeiro registro				
 				return true;
-			} else {				
-				System.out.println("verificarShow() --> Show já existe");
+			} else {								
 				return false;
 			}						
 		} catch (SQLException e) {
-			System.out.println("Erro ao pegar dados da banda: " + e.toString());
+			
 			return false;
 		} finally {			
 			if (conexao != null) { Conexao.fechaConexao(conexao);}			
@@ -108,7 +106,7 @@ public class Show {
     //Pegar id da banda pelo nome
     public Banda getBandaBy(String nome) {    	
 		Connection conexao = null;
-		try {	
+		try {				
 			Banda banda = new Banda();
 			conexao = Conexao.conectaBanco();
 			String sql =  "SELECT id_banda, nome FROM banda WHERE nome LIKE '%"+nome+"%'";
@@ -122,8 +120,7 @@ public class Show {
 				
 			}						
 			return banda;
-		} catch (SQLException e) {
-			System.out.println("Erro ao pegar dados da banda: " + e.toString());
+		} catch (SQLException e) {			
 			return null;
 		} finally {			
 			if (conexao != null) { Conexao.fechaConexao(conexao);}			
@@ -141,13 +138,10 @@ public class Show {
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
 				banda.setId_banda(rs.getInt("id_banda")); 
-				banda.setNome(rs.getString("b.nome"));
-				System.out.println(rs.getString("b.nome")); 
-				System.out.println("banda"+banda.getNome());
+				banda.setNome(rs.getString("b.nome"));				
 			}						
 			return banda;
-		} catch (SQLException e) {
-			System.out.println("Erro ao pegar dados da banda: " + e.toString());
+		} catch (SQLException e) {			
 			return null;
 		} finally {			
 			if (conexao != null) { Conexao.fechaConexao(conexao);}			
@@ -174,8 +168,7 @@ public class Show {
 				  show = new Show(idShow, idBanda, nomeShow, pais, Utilitarios.dateToStringBrasil(date));				
 			}				
 			return show;
-		} catch (SQLException e) {
-			System.out.println("Erro ao pegar dados da banda: " + e.toString());
+		} catch (SQLException e) {			
 			return null;
 		} finally {			
 			if (conexao != null) { Conexao.fechaConexao(conexao);}			
@@ -201,8 +194,7 @@ public class Show {
                 return Utilitarios.verificarRegistro(ps, "Show cadastrado com sucesso!", "Erro ao cadastrar show");
         	}
         	return false;
-        } catch (SQLException e) {
-            System.out.println("Erro ao cadastrar show: " + e.toString());
+        } catch (SQLException e) {            
             return false;
         } finally {
             if (conexao != null) {
@@ -222,10 +214,8 @@ public class Show {
             ps.setString(2, this.pais);
             ps.setString(3, this.date);
             ps.setInt(4, this.idShow);
-
             return Utilitarios.verificarRegistro(ps, "Show atualizado com sucesso!", "Erro ao atualizar show");
-        } catch (SQLException e) {
-            System.out.println("Erro ao atualizar show: " + e.toString());
+        } catch (SQLException e) {           
             return false;
         } finally {
             if (conexao != null) {
@@ -243,8 +233,7 @@ public class Show {
             PreparedStatement ps = conexao.prepareStatement(sql);
             ps.setInt(1, id);
             return Utilitarios.verificarRegistro(ps, "Show deletado com sucesso!", "Erro ao deletar show");
-        } catch (SQLException e) {
-            System.out.println("Erro ao deletar show: " + e.toString());
+        } catch (SQLException e) {           
             return false;
         } finally {
             if (conexao != null) {

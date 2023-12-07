@@ -167,7 +167,7 @@ public class JanelaBanda {
 								JOptionPane.showMessageDialog(janelaBanda, "Banda não cadastrada");
 							}
 						} else {
-							System.out.println("ação cancelada");
+							
 						}
 					}																				
 				} catch (Exception erro) {

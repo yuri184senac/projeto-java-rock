@@ -116,7 +116,7 @@ public class JanelaShow {
         arredondarBotao(botaoCadastrar);
         janelaShow.add(botaoCadastrar);
 
-        JButton botaoEditar = new JButton("Editar");
+        JButton botaoEditar = new JButton("Atualizar");
         botaoEditar.setBounds(160, 240, 100, 40);
         arredondarBotao(botaoEditar);
         janelaShow.add(botaoEditar);
@@ -161,9 +161,10 @@ public class JanelaShow {
 						botaoCadastrar.setEnabled(false);
 						botaoDeletar.setEnabled(true);
 						botaoEditar.setEnabled(true);
+						campoNomeBanda.setEnabled(false);
 					}					
 				} catch (Exception erro) {
-	                JOptionPane.showMessageDialog(janelaShow, "Erro ao consultar banda",
+	                JOptionPane.showMessageDialog(janelaShow, "Erro ao consultar o show",
 	                        "Erro", JOptionPane.ERROR_MESSAGE);
 	            }   							     
 			}
@@ -201,12 +202,13 @@ public class JanelaShow {
             	try {            		
             		if (Utilitarios.verificacaoDialogBox(janelaShow, "Deseja confirmar a ação?", null, "Ação cancelada")) {            			
             			//DATA
-            			int id_show = Integer.parseInt(campoIdShow.getText());	
+            			int id_show = Integer.parseInt(campoIdShow.getText());	            			
             			String dia = campoDiaData.getText();
                     	String mes = campoMesData.getText();
                     	String ano =campoAnoData.getText();
                     	String sqlData = ano+"-"+mes+"-"+dia;
                     	Banda banda = show.getBandaBy(campoNomeBanda.getText());//Pega o id da banda através do nome
+                    	                    
                     	//GRAVA OS DADOS NO OBJETO  
                     	show.setIdShow(id_show);
                     	show.setIdBanda(banda.getId_banda());                 	
@@ -216,7 +218,7 @@ public class JanelaShow {
                     	//GRAVA OS DADOS NO BANCO
                     	boolean result = show.editarShow();
                     	if(result) {
-                			JOptionPane.showMessageDialog(janelaShow, "Banda editada com Sucesso!");
+                			JOptionPane.showMessageDialog(janelaShow, "Show editada com Sucesso!");
                 			
                 		} else {
                 			JOptionPane.showMessageDialog(janelaShow, "Não foi possível atualizar este show,\n Insira um show que já exista", "Quem avisa amigo é", JOptionPane.WARNING_MESSAGE);
@@ -237,14 +239,14 @@ public class JanelaShow {
             			int id_show = Integer.parseInt(campoIdShow.getText());            	
                 		boolean result = show.deletarShow(id_show);
                 		if(result) {
-                			JOptionPane.showMessageDialog(janelaShow, "Banda Cadastrada com Sucesso!");
+                			JOptionPane.showMessageDialog(janelaShow, "Show Cadastrada com Sucesso!");
                 			
                 		} else {
                 			JOptionPane.showMessageDialog(janelaShow,"Show inválido,\n tente um id de show que já exista","Quem avisa amigo é", JOptionPane.WARNING_MESSAGE);
                 		}
             		}            		               
             	} catch (NumberFormatException erro) {
-                    JOptionPane.showMessageDialog(janelaShow, "Preencha o campo 'ID da Banda' corretamente!",
+                    JOptionPane.showMessageDialog(janelaShow, "Preencha o campo 'ID do show' corretamente!",
                             "Erro", JOptionPane.ERROR_MESSAGE);
                 }            	
             }
@@ -262,6 +264,8 @@ public class JanelaShow {
             	botaoCadastrar.setEnabled(true);
 				botaoDeletar.setEnabled(false);
 				botaoEditar.setEnabled(false);
+				campoNomeBanda.setEnabled(true);
+
             }
         });
 

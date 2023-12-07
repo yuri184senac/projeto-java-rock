@@ -39,7 +39,15 @@ public class Banda {
 			"NU METAL",
 			"METALCORE",
 			"SWEDISH DEATH METAL",
-			"NEW WAVE OF AMERICAN METAL"
+			"NEW WAVE OF AMERICAN METAL",
+			"ROCK CLÁSSICO",
+			"ROCK PROGRESSIVO",
+			"HARD ROCK",
+			"PUNK ROCK",
+			"NEW WAVE",
+			"GRUNGE",
+			"INDIE ROCK",
+			"ALTERNATIVE ROCK"					
 	};  
 	
 	//CONSTRUCTOR
@@ -84,15 +92,12 @@ public class Banda {
 			PreparedStatement ps = conexao.prepareStatement(sql);
 			ps.setString(1, nome);
 			ResultSet rs = ps.executeQuery();
-			if (!rs.isBeforeFirst()) { //Verifica se não está antes do primeiro registro
-				System.out.println("verificarBanda() --> Banda não existe");				
+			if (!rs.isBeforeFirst()) { //Verifica se não está antes do primeiro registro						
 				return true;
-			} else {				
-				System.out.println("verificarBanda() --> Banda já existe");
+			} else {								
 				return false;
 			}
-		} catch (SQLException e) {
-			System.out.println("Erro ao cadastrar banda: " + e.toString());
+		} catch (SQLException e) {			
 			return false;
 		}finally {
 			if (conexao != null) { Conexao.fechaConexao(conexao); }
@@ -120,8 +125,7 @@ public class Banda {
 				this.pais = rs.getString("pais");				
 			}				
 			return true;
-		} catch (SQLException e) {
-			System.out.println("Erro ao pegar dados da banda: " + e.toString());
+		} catch (SQLException e) {			
 			return false;
 		} finally {
 			if (conexao != null) { Conexao.fechaConexao(conexao);}
@@ -179,7 +183,7 @@ public class Banda {
 			ps.setInt(1, this.id_banda);
 			return Utilitarios.verificarRegistro(ps, "Exclusão realizada", "Exclusão não realizada");			
 		} catch (SQLException e) {
-			System.out.println("Erro ao atualizar banda: " + e.toString());
+			System.out.println("Erro ao deletar banda: " + e.toString());
 			return false;
 		} finally {
 			if (conexao != null) { Conexao.fechaConexao(conexao);}

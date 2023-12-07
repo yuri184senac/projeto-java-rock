@@ -53,6 +53,7 @@ public class JanelaListaShows extends JFrame {
         // Adiciona colunas ao modelo
         modelo.addColumn("id");
         modelo.addColumn("Banda");
+        modelo.addColumn("Gênero");
         modelo.addColumn("Festival");      
         modelo.addColumn("Local");
         modelo.addColumn("Data");
@@ -101,10 +102,11 @@ public class JanelaListaShows extends JFrame {
                 String nome_banda = rs.getString("nome");
                 String nome = rs.getString("s.nome");
                 Date data = rs.getDate("data_do_show");
-                String pais = rs.getString("s.pais");                
+                String pais = rs.getString("s.pais");  
+                String genero = rs.getString("genero");
                 //Formatando data
                 String dataFormatada = Utilitarios.dateToStringBrasil(data);                           
-                modelo.addRow(new Object[]{id_show, nome_banda, nome, pais, dataFormatada});
+                modelo.addRow(new Object[]{id_show, nome_banda, genero, nome, pais, dataFormatada});
             }            
             // Fecha recursos
             rs.close();
@@ -112,8 +114,10 @@ public class JanelaListaShows extends JFrame {
             
             conexao.close();
         } catch (SQLException e) {
-            System.out.println("Erro ao obter dados do show: " + e.toString());
-        }
+        	System.out.println("Error:"+e);
+		} finally {			
+			if (conexao != null) { Conexao.fechaConexao(conexao);}			
+		}		        
     }
     private static void arredondarBotao(JButton botao) {
         int tamanhoBorda = 5;

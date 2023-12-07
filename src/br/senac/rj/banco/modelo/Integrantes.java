@@ -78,8 +78,7 @@ public class Integrantes {
 				id_banda = rs.getInt("id_banda");
 			}		
 			return id_banda;
-		} catch (SQLException e) {
-			System.out.println("Erro ao cadastrar banda: " + e.toString());
+		} catch (SQLException e) {			
 			return -1;
 		}finally {
 			if (conexao != null) { Conexao.fechaConexao(conexao); }
@@ -87,41 +86,13 @@ public class Integrantes {
 	}
 	
 	
-	
-	private boolean verificarSeExiste(int id_banda) {		  
-		Connection conexao = null;
-		try {			
-			System.out.println(id_banda);
-			conexao = Conexao.conectaBanco();
-			String sql = "SELECT id_banda FROM integrantes WHERE id_banda=?";
-			PreparedStatement ps = conexao.prepareStatement(sql);			
-			ps.setInt(1, id_banda);
-			ResultSet rs = ps.executeQuery();
-			if (!rs.isBeforeFirst()) { //Verifica se não está antes do primeiro registro
-				System.out.println("verificarBanda() --> Integrantes da banda não existem");				
-				return false; //BANDA NÃO TEM INTEGRANTES
-			} else {				
-				System.out.println("verificarBanda() --> Integrantes da banda existem");
-				return true; //BANDA TEM INTEGRANTES
-			}
-		} catch (SQLException e) {
-			System.out.println("Erro ao cadastrar banda: " + e.toString());
-			return false;
-		}finally {
-			if (conexao != null) { Conexao.fechaConexao(conexao); }
-		}
-	}
-	
-	//GET
-	
-	//PAREI AQUI!
+			
+	//GET	
 	public boolean buscarIntegrantes(String nome_banda) {
-		Connection conexao = null;
-		
+		Connection conexao = null;		
 		try {						
 			int id_banda = this.getIdBandaByName(nome_banda, false);
-			conexao = Conexao.conectaBanco();
-			System.out.println(id_banda);
+			conexao = Conexao.conectaBanco();		
 			String sql1 = "SELECT * FROM `banda` b LEFT JOIN `integrantes` i ON b.id_banda=i.id_banda WHERE b.id_banda=?";	
 			PreparedStatement ps = conexao.prepareStatement(sql1);
 			ps.setInt(1, id_banda);
@@ -135,10 +106,9 @@ public class Integrantes {
 						this.guitarrista1 = rs.getString("guitarrista1");
 						this.baixista = rs.getString("baixista");						
 					}
-					return true;
-																												
+					return true;																												
 		} catch (SQLException e) {
-			System.out.println("Erro ao consultar integrantes: " + e.toString());
+			System.out.println("Error ao buscar integrantes: "+ e);
 			return false;
 		} finally {
 			if (conexao != null) { Conexao.fechaConexao(conexao);}
@@ -159,8 +129,8 @@ public class Integrantes {
 				ps.setString(5, this.guitarrista1);	
 				ps.setString(6, this.baixista);
 				return Utilitarios.verificarRegistro(ps, "Integrantes cadastrados com sucesso!", "Integrantes cadastrados sem sucesso");						
-		}  catch (SQLException e) {
-			System.out.println("Erro ao cadastrar banda: " + e.toString());
+		}  catch (SQLException e) {	
+			System.out.println("Error ao cadastrar integrantes: "+ e);
 			return false;
 		} finally {
 			if (conexao != null) { Conexao.fechaConexao(conexao);}
@@ -188,8 +158,8 @@ public class Integrantes {
 			ps.setString(4, baixista);
 			ps.setInt(5, id);
 			return Utilitarios.verificarRegistro(ps, "Atualização realizada", "Atualização não realizada");									
-		} catch (SQLException e) {
-			System.out.println("Erro ao atualizar integrantes: " + e.toString());
+		} catch (SQLException e) {	
+			System.out.println("Error ao atualizar integrantes: "+ e);
 			return false;
 		} finally {
 			if (conexao != null) { Conexao.fechaConexao(conexao);}
@@ -208,7 +178,7 @@ public class Integrantes {
 			ps.setInt(1, id);
 			return Utilitarios.verificarRegistro(ps, "Exclusão realizada", "Exclusão não realizada");			
 		} catch (SQLException e) {
-			System.out.println("Erro ao deletar integrantes: " + e.toString());
+			System.out.println("Error ao excluir integrantes: "+ e);
 			return false;
 		} finally {
 			if (conexao != null) { Conexao.fechaConexao(conexao);}
