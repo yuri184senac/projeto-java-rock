@@ -23,6 +23,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
 
 import br.senac.rj.banco.modelo.Conexao;
 import br.senac.rj.banco.service.Utilitarios;
@@ -50,13 +51,17 @@ public class JanelaListaShows extends JFrame {
         tabela.setOpaque(true);
         tabela.setBackground(new Color(194,  117, 0));
         // Adiciona colunas ao modelo
+        modelo.addColumn("id");
         modelo.addColumn("Banda");
         modelo.addColumn("Festival");      
         modelo.addColumn("Local");
         modelo.addColumn("Data");
+        
+        TableColumnModel columnModel = tabela.getColumnModel();
+        columnModel.getColumn(0).setPreferredWidth(0);
         // Obtém dados do banco de dados
         obterDadosDoBanco();
-
+        
         // Adiciona a tabela a um painel de rolagem
         JScrollPane scrollPane = new JScrollPane(tabela);
         getContentPane().add(scrollPane);
@@ -92,13 +97,14 @@ public class JanelaListaShows extends JFrame {
             
             // Adiciona linhas ao modelo com os dados do banco
             while (rs.next()) {
+            	int id_show = rs.getInt("id_show");
                 String nome_banda = rs.getString("nome");
                 String nome = rs.getString("s.nome");
                 Date data = rs.getDate("data_do_show");
                 String pais = rs.getString("s.pais");                
                 //Formatando data
                 String dataFormatada = Utilitarios.dateToStringBrasil(data);                           
-                modelo.addRow(new Object[]{nome_banda, nome, pais, dataFormatada});
+                modelo.addRow(new Object[]{id_show, nome_banda, nome, pais, dataFormatada});
             }            
             // Fecha recursos
             rs.close();

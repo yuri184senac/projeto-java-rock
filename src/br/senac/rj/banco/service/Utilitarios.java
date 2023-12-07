@@ -100,9 +100,8 @@ public class Utilitarios {
         return dataFormatada;
 	}
 	
-	public static String[] dateSliceDayMonthYear(Date data) {
-		String dataFormatada = dateToStringBrasil(data);
-		return dataFormatada.split("/");
+	public static String[] dateSliceDayMonthYear(String data) {		
+		return data.split("/");
 	}
 		
 }

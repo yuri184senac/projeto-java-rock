@@ -40,43 +40,50 @@ public class JanelaShow {
         
       
         
-        // ID Banda
+        // Id do Show
+        JLabel labelIdShow = new JLabel("Id do show:");
+        labelIdShow.setBounds(50, 40, 120, 20);
+        JTextField campoIdShow = new JTextField();
+        campoIdShow.setBounds(180, 40, 35, 20);
+        
+        // Nome Banda
         JLabel labelIdBanda = new JLabel("Nome da banda:");
-        labelIdBanda.setBounds(50, 40, 120, 20);
+        labelIdBanda.setBounds(50, 80, 120, 20);
         JTextField campoNomeBanda = new JTextField();
-        campoNomeBanda.setBounds(180, 40, 150, 20);
-
+        campoNomeBanda.setBounds(180, 80, 150, 20);
+        
         // Nome
         JLabel labelNome = new JLabel("Nome do show:");
-        labelNome.setBounds(50, 80, 120, 20);
+        labelNome.setBounds(50, 120, 120, 20);
         JTextField campoNome = new JTextField();
-        campoNome.setBounds(180, 80, 150, 20);
+        campoNome.setBounds(180, 120, 150, 20);
 
         // País
         JLabel labelPais = new JLabel("País:");
-        labelPais.setBounds(50, 120, 120, 20);
+        labelPais.setBounds(50, 160, 120, 20);
         JTextField campoPais = new JTextField();
-        campoPais.setBounds(180, 120, 150, 20);
+        campoPais.setBounds(180, 160, 150, 20);
 
         // Data do Show
         JLabel labelDataShow = new JLabel("Data do Show:");
-        labelDataShow.setBounds(50, 160, 120, 20);
+        labelDataShow.setBounds(50, 200, 120, 20);
         
         //DIA - MES - ANO
         JTextField campoDiaData = new JTextField();
-        campoDiaData.setBounds(180, 160, 20, 20);
+        campoDiaData.setBounds(180, 200, 20, 20);
         JLabel separador1 = new JLabel("/");
-        separador1.setBounds(210, 160, 120, 20);
+        separador1.setBounds(210, 200, 120, 20);
         JTextField campoMesData = new JTextField();
-        campoMesData.setBounds(220, 160, 20, 20);
+        campoMesData.setBounds(220, 200, 20, 20);
         JLabel separador2 = new JLabel("/");
-        separador2.setBounds(250, 160, 120, 20);
+        separador2.setBounds(250, 200, 120, 20);
         JTextField campoAnoData = new JTextField();
-        campoAnoData.setBounds(260, 160, 35, 20);
+        campoAnoData.setBounds(260, 200, 35, 20);
         
         
                
-
+        caixa.add(labelIdShow);
+        caixa.add(campoIdShow);
         caixa.add(labelIdBanda);
         caixa.add(campoNomeBanda);
         caixa.add(labelNome);
@@ -130,18 +137,20 @@ public class JanelaShow {
         //BACKGROUND
         caixa.add(background);               
         
-        Show show = new Show();
-        botaoPesquisar.addActionListener(new ActionListener() {
-        	Banda banda = new Banda();
+        Show show = new Show();       
+        botaoPesquisar.addActionListener(new ActionListener() {        	
 			public void actionPerformed(ActionEvent arg0) {
-				ArrayList<Show> showsDaBanda;
-				String nome = campoNomeBanda.getText();					
-				showsDaBanda = show.consultarShow(nome);				
+				int id_show = Integer.parseInt(campoIdShow.getText());	
+				
+				Show shw = show.consultarShow(id_show);	//Consulta o show		
+				Banda banda = show.getBandaBy(id_show);	 			
+				String date[] = Utilitarios.dateSliceDayMonthYear(shw.getDate());
+				campoDiaData.setText(date[0]);
+				campoMesData.setText(date[1]);
+				campoAnoData.setText(date[2]);
+				campoPais.setText(shw.getPais());
 				campoNomeBanda.setText(banda.getNome());
-				campoPais.setText(banda.getPais());	
-				for (Show show: showsDaBanda) {
-					System.out.println(show.getDate());
-				}
+				campoNome.setText(shw.getNomeShow());
 			}
 		});
                 
