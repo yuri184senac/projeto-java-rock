@@ -130,30 +130,42 @@ public class JanelaShow {
         botaoLimpar.setBounds(340, 10, 80, 24);
         arredondarBotao(botaoLimpar);
         janelaShow.add(botaoLimpar);
-        
+               
         //BOTOES
         botaoEditar.setEnabled(false);
+        botaoDeletar.setEnabled(false);
         
         //BACKGROUND
         caixa.add(background);               
         
+       
+        
         Show show = new Show();       
         botaoPesquisar.addActionListener(new ActionListener() {        	
 			public void actionPerformed(ActionEvent arg0) {
-				int id_show = Integer.parseInt(campoIdShow.getText());	
-				
-				Show shw = show.consultarShow(id_show);	//Consulta o show		
-				Banda banda = show.getBandaBy(id_show);	 			
-				String date[] = Utilitarios.dateSliceDayMonthYear(shw.getDate());
-				campoDiaData.setText(date[0]);
-				campoMesData.setText(date[1]);
-				campoAnoData.setText(date[2]);
-				campoPais.setText(shw.getPais());
-				campoNomeBanda.setText(banda.getNome());
-				campoNome.setText(shw.getNomeShow());
-		        botaoEditar.setEnabled(true);
-
-			       
+				try {
+					int id_show = Integer.parseInt(campoIdShow.getText());					
+					Show shw = show.consultarShow(id_show);	//Consulta o show		
+					Banda banda = show.getBandaBy(id_show);
+					if(shw==null) {
+						JOptionPane.showMessageDialog(janelaShow, "Esse show não existe", "Quem avisa amigo é", JOptionPane.WARNING_MESSAGE);						
+					} else {
+						String date[] = Utilitarios.dateSliceDayMonthYear(shw.getDate());
+						campoDiaData.setText(date[0]);
+						campoMesData.setText(date[1]);
+						campoAnoData.setText(date[2]);
+						campoPais.setText(shw.getPais());
+						campoNomeBanda.setText(banda.getNome());
+						campoNome.setText(shw.getNomeShow());
+				        //Mudar botões
+						botaoCadastrar.setEnabled(false);
+						botaoDeletar.setEnabled(true);
+						botaoEditar.setEnabled(true);
+					}					
+				} catch (Exception erro) {
+	                JOptionPane.showMessageDialog(janelaShow, "Erro ao consultar banda",
+	                        "Erro", JOptionPane.ERROR_MESSAGE);
+	            }   							     
 			}
 		});
                 
@@ -174,7 +186,7 @@ public class JanelaShow {
 	    	            if (result) {
 	    	                JOptionPane.showMessageDialog(janelaShow, "Show Cadastrado com Sucesso!");
 	    	            } else {
-	    	                JOptionPane.showMessageDialog(janelaShow, "Não foi possível realizar o cadastro do show");
+	    	                JOptionPane.showMessageDialog(janelaShow, "Não foi possível realizar o cadastro do show", "Quem avisa amigo é", JOptionPane.WARNING_MESSAGE);
 	    	            }            
 	    			}
 	    		} catch (NumberFormatException erro) {
@@ -203,6 +215,12 @@ public class JanelaShow {
                     	show.setDate(sqlData);
                     	//GRAVA OS DADOS NO BANCO
                     	boolean result = show.editarShow();
+                    	if(result) {
+                			JOptionPane.showMessageDialog(janelaShow, "Banda editada com Sucesso!");
+                			
+                		} else {
+                			JOptionPane.showMessageDialog(janelaShow, "Não foi possível atualizar este show,\n Insira um show que já exista", "Quem avisa amigo é", JOptionPane.WARNING_MESSAGE);
+                		}
             		}    		
             		                	       	                	              
                 } catch (NumberFormatException erro) {
@@ -218,6 +236,12 @@ public class JanelaShow {
             		if(Utilitarios.verificacaoDialogBox(janelaShow, "Deseja confirmar a ação?", null, "Ação cancelada")) {
             			int id_show = Integer.parseInt(campoIdShow.getText());            	
                 		boolean result = show.deletarShow(id_show);
+                		if(result) {
+                			JOptionPane.showMessageDialog(janelaShow, "Banda Cadastrada com Sucesso!");
+                			
+                		} else {
+                			JOptionPane.showMessageDialog(janelaShow,"Show inválido,\n tente um id de show que já exista","Quem avisa amigo é", JOptionPane.WARNING_MESSAGE);
+                		}
             		}            		               
             	} catch (NumberFormatException erro) {
                     JOptionPane.showMessageDialog(janelaShow, "Preencha o campo 'ID da Banda' corretamente!",
@@ -234,6 +258,10 @@ public class JanelaShow {
                 campoDiaData.setText("");
             	campoMesData.setText("");
             	campoAnoData.setText("");
+            	campoIdShow.setText("");
+            	botaoCadastrar.setEnabled(true);
+				botaoDeletar.setEnabled(false);
+				botaoEditar.setEnabled(false);
             }
         });
 
