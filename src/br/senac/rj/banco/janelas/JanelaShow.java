@@ -178,12 +178,11 @@ public class JanelaShow {
 	    	        	String mes = campoMesData.getText();
 	    	        	String ano =campoAnoData.getText();
 	    	        	String sqlData = ano+"-"+mes+"-"+dia;    	                	    	                	
-	    	        	Banda banda = show.getBandaBy(campoNomeBanda.getText());
-	    	        	show.setIdBanda(banda.getId_banda());                	
+	    	        		    	        		    	                        
 	    	        	show.setNomeShow(campoNome.getText());            	                	                	
 	    	        	show.setPais(campoPais.getText());
 	    	        	show.setDate(sqlData);    	                	    	                    
-	    	            boolean result = show.cadastrarShow();    					
+	    	            boolean result = show.cadastrarShow(campoNomeBanda.getText());    					
 	    	            if (result) {
 	    	                JOptionPane.showMessageDialog(janelaShow, "Show Cadastrado com Sucesso!");
 	    	            } else {
@@ -207,12 +206,12 @@ public class JanelaShow {
                     	String mes = campoMesData.getText();
                     	String ano =campoAnoData.getText();
                     	String sqlData = ano+"-"+mes+"-"+dia;
-                    	Banda banda = show.getBandaBy(campoNomeBanda.getText());//Pega o id da banda através do nome
-                    	                    
+                    	Banda banda = show.getBandaBy(campoNomeBanda.getText());//Pega o id da banda através do nome                    	  
                     	//GRAVA OS DADOS NO OBJETO  
                     	show.setIdShow(id_show);
                     	show.setIdBanda(banda.getId_banda());                 	
-                    	show.setNomeShow(campoNome.getText());            	                	                	
+                    	show.setNomeShow(campoNome.getText());
+                    	System.out.println(campoNome.getText());
                     	show.setPais(campoPais.getText());
                     	show.setDate(sqlData);
                     	//GRAVA OS DADOS NO BANCO

@@ -1,0 +1,34 @@
+
+
+use rockfestival
+
+CREATE TABLE banda (
+	id_banda INT,
+	nome VARCHAR(50),
+	genero VARCHAR(30),
+	pais VARCHAR(30),
+	PRIMARY KEY (id_banda)
+);
+
+CREATE TABLE integrantes (
+	id_integrantes INT,
+	id_banda INT,
+	vocalista VARCHAR(50),
+	baterista VARCHAR(50),
+	baixista VARCHAR(50),
+	guitarrista1 VARCHAR(50),	
+	PRIMARY KEY (id_integrantes),
+	FOREIGN KEY (id_banda) REFERENCES banda (id_banda) 
+	ON DELETE CASCADE
+);
+
+CREATE TABLE shows (
+	id_show INT,
+	id_banda INT,
+	nome VARCHAR(50),
+	pais VARCHAR(50),
+	data_do_show DATE,	
+	PRIMARY KEY (id_integrantes),
+	FOREIGN KEY (id_banda) REFERENCES banda (id_banda) 
+	ON DELETE CASCADE
+);

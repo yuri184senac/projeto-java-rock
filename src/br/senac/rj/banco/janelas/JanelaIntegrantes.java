@@ -23,7 +23,7 @@ public class JanelaIntegrantes {
 
     public static JFrame criarJanelaIntegrantes() {
     	
-
+    
     	JFrame janelaIntegrantes = new JFrame("Cadastro de Integrantes");
         janelaIntegrantes.setResizable(false);
         janelaIntegrantes.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -57,6 +57,7 @@ public class JanelaIntegrantes {
         labelGuitarrista.setForeground(Color.WHITE);
         labelBaixista.setForeground(Color.WHITE);
         
+        //Ajusta o tamanho e posição
         labelFkBanda.setBounds(50, 40, 100, 20);
         labelVocalista.setBounds(50, 80, 100, 20);
         labelBaterista.setBounds(50, 120, 100, 20);

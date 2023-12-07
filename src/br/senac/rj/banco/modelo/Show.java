@@ -78,34 +78,12 @@ public class Show {
     public void setPais(String pais) {
         this.pais = pais;
     }
-    
-    
-    private boolean verificarCadastro(int id_show, int id_banda, String nome_show) {
-    	Connection conexao = null;
-		try {							
-			conexao = Conexao.conectaBanco();
-			String sql1 = "SELECT * FROM `banda` b LEFT JOIN `shows` s ON b.id_banda=s.id_banda WHERE id_show=? AND s.nome=? AND b.id_banda=?";
-			PreparedStatement ps = conexao.prepareStatement(sql1);
-			ps.setInt(1, id_show);
-			ps.setString(2, nome_show);
-			ps.setInt(3, id_banda);
-			ResultSet rs = ps.executeQuery();
-			if (rs.isBeforeFirst()) { //Verifica se não está antes do primeiro registro				
-				return true;
-			} else {								
-				return false;
-			}						
-		} catch (SQLException e) {
-			
-			return false;
-		} finally {			
-			if (conexao != null) { Conexao.fechaConexao(conexao);}			
-		}				
-    }
+            
       
     //Pegar id da banda pelo nome
     public Banda getBandaBy(String nome) {    	
 		Connection conexao = null;
+		System.out.println("da"+nome);
 		try {				
 			Banda banda = new Banda();
 			conexao = Conexao.conectaBanco();
@@ -116,8 +94,7 @@ public class Show {
 				int id = rs.getInt("id_banda");
 				this.idBanda = id;
 				banda.setId_banda(id);
-				banda.setNome(rs.getString("nome"));
-				
+				banda.setNome(rs.getString("nome"));				
 			}						
 			return banda;
 		} catch (SQLException e) {			
@@ -177,13 +154,13 @@ public class Show {
     
     
     // Cadastrar
-    public boolean cadastrarShow() {
+    public boolean cadastrarShow(String nomeBanda) {
         Connection conexao = null;
-        try {
+        try {        
         	conexao = Conexao.conectaBanco();
-        	int id_show = Utilitarios.gerarId("shows");
-        	//CONDIÇÃO DE CADASTRO
-        	if(this.verificarCadastro(id_show, this.idBanda, this.nomeShow)) {
+        	int id_show = Utilitarios.gerarId("shows");        	
+        	Banda banda = getBandaBy(nomeBanda);         	
+        	//CONDIÇÃO DE CADASTRO        	        	
         		String sql ="INSERT INTO shows (id_show, id_banda, nome, pais, data_do_show) VALUES (?, ?, ?, ?, ?)";
                 PreparedStatement ps = conexao.prepareStatement(sql);
                 ps.setInt(1, id_show);
@@ -192,8 +169,7 @@ public class Show {
                 ps.setString(4, this.pais);
                 ps.setString(5, this.date);
                 return Utilitarios.verificarRegistro(ps, "Show cadastrado com sucesso!", "Erro ao cadastrar show");
-        	}
-        	return false;
+                	
         } catch (SQLException e) {            
             return false;
         } finally {
@@ -208,12 +184,13 @@ public class Show {
         Connection conexao = null;
         try {
             conexao = Conexao.conectaBanco();
-            String sql = "UPDATE shows SET id_banda=?, pais=?, data_do_show=? WHERE id_show=?";
+            String sql = "UPDATE shows SET id_banda=?, nome=?, pais=?, data_do_show=? WHERE id_show=?";
             PreparedStatement ps = conexao.prepareStatement(sql);
             ps.setInt(1, this.idBanda);        
-            ps.setString(2, this.pais);
-            ps.setString(3, this.date);
-            ps.setInt(4, this.idShow);
+            ps.setString(2, this.nomeShow);
+            ps.setString(3, this.pais);
+            ps.setString(4, this.date);
+            ps.setInt(5, this.idShow);
             return Utilitarios.verificarRegistro(ps, "Show atualizado com sucesso!", "Erro ao atualizar show");
         } catch (SQLException e) {           
             return false;
