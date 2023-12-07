@@ -1,8 +1,16 @@
+<<<<<<< HEAD
 use rockfestival;
 
 
 
 CREATE TABLE IF NOT EXISTS `rockfestival`.`banda`(
+=======
+
+
+use rockfestival
+
+CREATE TABLE banda (
+>>>>>>> 7cce06ddf30237f4f1c4f5ca2d814c5c0092a440
 	id_banda INT,
 	nome VARCHAR(50),
 	genero VARCHAR(30),
@@ -10,7 +18,11 @@ CREATE TABLE IF NOT EXISTS `rockfestival`.`banda`(
 	PRIMARY KEY (id_banda)
 );
 
+<<<<<<< HEAD
 CREATE TABLE IF NOT EXISTS `rockfestival`.`integrantes`(
+=======
+CREATE TABLE integrantes (
+>>>>>>> 7cce06ddf30237f4f1c4f5ca2d814c5c0092a440
 	id_integrantes INT,
 	id_banda INT,
 	vocalista VARCHAR(50),
@@ -22,7 +34,11 @@ CREATE TABLE IF NOT EXISTS `rockfestival`.`integrantes`(
 	ON DELETE CASCADE
 );
 
+<<<<<<< HEAD
 CREATE TABLE IF NOT EXISTS `rockfestival`.`shows`(
+=======
+CREATE TABLE shows (
+>>>>>>> 7cce06ddf30237f4f1c4f5ca2d814c5c0092a440
 	id_show INT,
 	id_banda INT,
 	nome VARCHAR(50),
@@ -31,5 +47,9 @@ CREATE TABLE IF NOT EXISTS `rockfestival`.`shows`(
 	PRIMARY KEY (id_integrantes),
 	FOREIGN KEY (id_banda) REFERENCES banda (id_banda) 
 	ON DELETE CASCADE
+<<<<<<< HEAD
 );
 
+=======
+);
+>>>>>>> 7cce06ddf30237f4f1c4f5ca2d814c5c0092a440
