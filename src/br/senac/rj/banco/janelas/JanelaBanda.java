@@ -93,16 +93,26 @@ public class JanelaBanda {
         //BACKGROUND
         caixa.add(background);
               
+        //BOTOES
+        botaoEditar.setEnabled(false);
+        botaoDeletar.setEnabled(false);
         /*INSTANCIAS*/
         Banda banda = new Banda();
         
         botaoPesquisar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				String nome = campoNomeBanda.getText();				
-				banda.getBanda(nome, false);									
-				campoNomeBanda.setText(banda.getNome());				
-				campoPais.setText(banda.getPais());							
-				dropdownGenero.setSelectedItem(banda.getGenero());
+					if (banda.getBanda(nome, false)) {
+						campoNomeBanda.setText(banda.getNome());				
+						campoPais.setText(banda.getPais());							
+						dropdownGenero.setSelectedItem(banda.getGenero());
+						botaoDeletar.setEnabled(true);
+						botaoEditar.setEnabled(true);
+					} else {//se houver banda com mesmo nome, desativa os botoes deletar e editar
+						botaoCadastrar.setEnabled(true);
+						botaoDeletar.setEnabled(false);
+						botaoEditar.setEnabled(false);
+					}											
 			}
 		});
         
@@ -119,12 +129,13 @@ public class JanelaBanda {
 	                        "Quem avisa amigo é", JOptionPane.WARNING_MESSAGE); 
 				} else {
 				//Executa ação  se nenhum dos campos estiverem vazios
-					if(Utilitarios.verificacaoDialogBox(janelaBanda, "Deseja confirmar a ação?", "Cadastro realizado", "Ação cancelada")) {
+					if(Utilitarios.verificacaoDialogBox(janelaBanda, "Deseja confirmar a ação?", null, "Ação cancelada")) {
 						banda.setNome(campoNomeBanda.getText());
 						banda.setPais(campoPais.getText());
 						Boolean result = banda.cadastrarBanda(dropdownGenero.getSelectedItem().toString());
 						if (result) {
 							JOptionPane.showMessageDialog(janelaBanda, "Banda Cadastrada com Sucesso!");
+							botaoEditar.setEnabled(true);
 						} else {
 							JOptionPane.showMessageDialog(janelaBanda, "Não foi possível realizar cadastro,\n nome da banda já existente");
 						}			
@@ -199,7 +210,10 @@ public class JanelaBanda {
 				campoPais.setText("");				
 				dropdownGenero.setSelectedItem("");
 				banda.setNome(null);
-				banda.setPais(null);								
+				banda.setPais(null);
+				botaoCadastrar.setEnabled(true);
+				botaoDeletar.setEnabled(false);
+				botaoEditar.setEnabled(false);
 			}
 		});
         

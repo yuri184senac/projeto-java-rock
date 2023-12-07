@@ -118,7 +118,7 @@ public class JanelaIntegrantes {
         
         //BOTOES
         botaoEditar.setEnabled(false);
-        
+        botaoDeletar.setEnabled(false);
         //BACKGROUND
         caixa.add(background);
         
@@ -137,10 +137,13 @@ public class JanelaIntegrantes {
                 	jTextBaterista.setText(intg.getBaterista());
                 	jTextGuitarrista.setText(intg.getGuitarrista1());
                 	jTextBaixista.setText(intg.getBaixista());
-        			botaoEditar.setEnabled(true);
+                	botaoDeletar.setEnabled(true);
+					botaoEditar.setEnabled(true);
         		} else {
         			jTextFkBanda.setText(intg.getNome_banda());        			
-        			botaoEditar.setEnabled(false);
+        			botaoCadastrar.setEnabled(true);
+					botaoDeletar.setEnabled(false);
+					botaoEditar.setEnabled(false);
         		}        		        		        		       		        			
         }});
         
@@ -174,6 +177,7 @@ public class JanelaIntegrantes {
                                         "Erro", JOptionPane.ERROR_MESSAGE);
                     		} else {
                     			JOptionPane.showMessageDialog(janelaIntegrantes, "Cadastro realizado com sucesso!");
+                    			botaoEditar.setEnabled(true);
                     		}
                     	}                                        	                                                                                                        
                     }
@@ -240,7 +244,9 @@ public class JanelaIntegrantes {
             	jTextBaterista.setText("");
             	jTextGuitarrista.setText("");
             	jTextBaixista.setText("");
-            	botaoEditar.setEnabled(false);
+            	botaoCadastrar.setEnabled(true);
+				botaoDeletar.setEnabled(false);
+				botaoEditar.setEnabled(false);
             }
                       
         });

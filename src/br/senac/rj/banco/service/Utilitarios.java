@@ -6,10 +6,13 @@ import br.senac.rj.banco.modelo.Conexao;
 import javax.swing.JFrame;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.Random;
+import java.util.TimeZone;
 
 
 public class Utilitarios {
@@ -88,6 +91,18 @@ public class Utilitarios {
 			return false;
 		}	
 	}
-		
+	
+	//formatar a data que vem do banco de dados para o padrão brasileiro
+	public static String dateToStringBrasil(Date data) {
+		SimpleDateFormat f = new SimpleDateFormat("dd/MM/yyyy");
+        f.setTimeZone(TimeZone.getTimeZone("UTC"));
+        String dataFormatada = f.format(data); 
+        return dataFormatada;
+	}
+	
+	public static String[] dateSliceDayMonthYear(Date data) {
+		String dataFormatada = dateToStringBrasil(data);
+		return dataFormatada.split("/");
+	}
 		
 }

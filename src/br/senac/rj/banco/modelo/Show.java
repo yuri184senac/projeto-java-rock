@@ -1,11 +1,11 @@
 package br.senac.rj.banco.modelo;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
-
+import java.util.ArrayList;
 
 import br.senac.rj.banco.service.Utilitarios;
 
@@ -16,6 +16,18 @@ public class Show {
     private String nomeShow; 
     private String pais;
     private String date;
+    
+    public Show() {
+    	
+    }
+    
+    public Show(int idShow, int idBanda, String nomeShow, String pais, String date) {
+    	this.idShow = idShow;
+    	this.idBanda = idBanda;
+    	this.nomeShow = nomeShow;
+    	this.pais = pais;
+    	this.date = date;
+    }
 
     public String getDate() {
 		return date;
@@ -69,29 +81,9 @@ public class Show {
     
     
     //CONSULTAR
-    /**public boolean obterShowsPorDataRecente() {
-    	Connection conexao = null;
-		try {			
-			conexao = Conexao.conectaBanco();
-			String sql =  "SELECT * FROM show";
-			PreparedStatement ps = conexao.prepareStatement(sql);			
-			ResultSet rs = ps.executeQuery();
-			while (rs.next()) {
-				Show show
-			}						
-			
-		} catch (SQLException e) {
-			System.out.println("Erro ao pegar dados da banda: " + e.toString());
-			
-		} finally {			
-			if (conexao != null) { Conexao.fechaConexao(conexao);}			
-		}		
-	}**/
-    	
-    
-    
+        //UMA BANDA NAO PODE SE CADASTRAR NO MESMO SHOW
     //Pegar id da banda pelo nome
-    public Banda getBanda(String nome) {    	
+    public Banda getBandaBy(String nome) {    	
 		Connection conexao = null;
 		try {	
 			Banda banda = new Banda();
@@ -101,7 +93,7 @@ public class Show {
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
 				banda.setId_banda(rs.getInt("id_banda")); 
-				banda.setNome(rs.getString("nome"));			   
+				banda.setNome(rs.getString("nome"));
 			}						
 			return banda;
 		} catch (SQLException e) {
@@ -113,6 +105,34 @@ public class Show {
 	}
     
     // Retornar dados show
+    public ArrayList<Show> consultarShow(String nome) {
+    	Connection conexao = null;
+		try {							
+			Banda banda =this.getBandaBy(nome);						
+			ArrayList<Show> showList= new ArrayList<Show>();				
+			conexao = Conexao.conectaBanco();
+			String sql = "SELECT * FROM shows WHERE id_banda=?";//pegar todos os shows relacionandos à aquele id da banda
+			PreparedStatement ps = conexao.prepareStatement(sql);
+			ps.setInt(1, banda.getId_banda());
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				  int idShow = rs.getInt("id_show");
+				  int idBanda = rs.getInt("id_banda");
+				  String nomeShow = rs.getString("nome"); 
+				  String pais = rs.getString("pais");
+				  String date = rs.getString("data_do_show");									
+				showList.add(new Show(idShow, idBanda, nomeShow, pais, date));				
+			}	
+			
+			return showList;
+		} catch (SQLException e) {
+			System.out.println("Erro ao pegar dados da banda: " + e.toString());
+			return null;
+		} finally {			
+			if (conexao != null) { Conexao.fechaConexao(conexao);}			
+		}		
+    }
+    
     
     // Cadastrar
     public boolean cadastrarShow() {

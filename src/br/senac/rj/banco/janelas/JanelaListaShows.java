@@ -25,6 +25,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
 import br.senac.rj.banco.modelo.Conexao;
+import br.senac.rj.banco.service.Utilitarios;
 
 public class JanelaListaShows extends JFrame {
     private JTable tabela;
@@ -96,9 +97,7 @@ public class JanelaListaShows extends JFrame {
                 Date data = rs.getDate("data_do_show");
                 String pais = rs.getString("s.pais");                
                 //Formatando data
-                SimpleDateFormat f = new SimpleDateFormat("dd/MM/yyyy");
-                f.setTimeZone(TimeZone.getTimeZone("UTC"));
-                String dataFormatada = f.format(data);                               
+                String dataFormatada = Utilitarios.dateToStringBrasil(data);                           
                 modelo.addRow(new Object[]{nome_banda, nome, pais, dataFormatada});
             }            
             // Fecha recursos

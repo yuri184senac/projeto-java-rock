@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -133,9 +134,14 @@ public class JanelaShow {
         botaoPesquisar.addActionListener(new ActionListener() {
         	Banda banda = new Banda();
 			public void actionPerformed(ActionEvent arg0) {
+				ArrayList<Show> showsDaBanda;
 				String nome = campoNomeBanda.getText();					
-				banda = show.getBanda(nome);
-				campoNomeBanda.setText(banda.getNome());					
+				showsDaBanda = show.consultarShow(nome);				
+				campoNomeBanda.setText(banda.getNome());
+				campoPais.setText(banda.getPais());	
+				for (Show show: showsDaBanda) {
+					System.out.println(show.getDate());
+				}
 			}
 		});
                 
@@ -150,7 +156,7 @@ public class JanelaShow {
                 	String sqlData = ano+"-"+mes+"-"+dia;
                 	
                 	
-                	Banda banda = show.getBanda(campoNomeBanda.getText());
+                	Banda banda = show.getBandaBy(campoNomeBanda.getText());
                 	show.setIdBanda(banda.getId_banda());                	
                 	show.setNomeShow(campoNome.getText());            	                	                	
                 	show.setPais(campoPais.getText());
@@ -177,7 +183,7 @@ public class JanelaShow {
                     	String mes = campoMesData.getText();
                     	String ano =campoAnoData.getText();
                     	String sqlData = ano+"-"+mes+"-"+dia;
-                    	banda = show.getBanda(campoNomeBanda.getText());//Pega o id da banda através do nome
+                    	banda = show.getBandaBy(campoNomeBanda.getText());//Pega o id da banda através do nome
                     	//GRAVA OS DADOS NO OBJETO
                     	show.setIdBanda(banda.getId_banda());                    	
                     	show.setNomeShow(campoNome.getText());            	                	                	
@@ -206,6 +212,7 @@ public class JanelaShow {
 
         botaoDeletar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
+            	
                 // Adicione lógica para deletar o show
                 // Utilize a lógica semelhante à do cadastro, mas para a deleção
             }

@@ -78,7 +78,7 @@ public class Banda {
 	/*VERIFICA REGISTRO DE NOME DA BANDA*/
 	private boolean verificarSeExiste(String nome) {		  
 		Connection conexao = null;
-		try {			
+		try {				
 			conexao = Conexao.conectaBanco();
 			String sql = "SELECT nome FROM banda WHERE nome=?";
 			PreparedStatement ps = conexao.prepareStatement(sql);
