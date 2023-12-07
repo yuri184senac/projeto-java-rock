@@ -178,14 +178,13 @@ public class JanelaShow {
 	    	        	String mes = campoMesData.getText();
 	    	        	String ano =campoAnoData.getText();
 	    	        	String sqlData = ano+"-"+mes+"-"+dia;    	                	    	                	
-	    	        	Banda banda = show.getBandaBy(campoNomeBanda.getText());
-	    	        	show.setIdBanda(banda.getId_banda());                	
+	    	        		    	        		    	                        
 	    	        	show.setNomeShow(campoNome.getText());            	                	                	
 	    	        	show.setPais(campoPais.getText());
 	    	        	show.setDate(sqlData);    	                	    	                    
-	    	            boolean result = show.cadastrarShow();    					
+	    	            boolean result = show.cadastrarShow(campoNomeBanda.getText());    					
 	    	            if (result) {
-	    	                JOptionPane.showMessageDialog(janelaShow, "Show Cadastrado com Sucesso!");
+	    	                JOptionPane.showMessageDialog(janelaShow, "Show cadastrado com sucesso!");
 	    	            } else {
 	    	                JOptionPane.showMessageDialog(janelaShow, "Não foi possível realizar o cadastro do show", "Quem avisa amigo é", JOptionPane.WARNING_MESSAGE);
 	    	            }            
@@ -207,18 +206,18 @@ public class JanelaShow {
                     	String mes = campoMesData.getText();
                     	String ano =campoAnoData.getText();
                     	String sqlData = ano+"-"+mes+"-"+dia;
-                    	Banda banda = show.getBandaBy(campoNomeBanda.getText());//Pega o id da banda através do nome
-                    	                    
+                    	Banda banda = show.getBandaBy(campoNomeBanda.getText());//Pega o id da banda através do nome                    	  
                     	//GRAVA OS DADOS NO OBJETO  
                     	show.setIdShow(id_show);
                     	show.setIdBanda(banda.getId_banda());                 	
-                    	show.setNomeShow(campoNome.getText());            	                	                	
+                    	show.setNomeShow(campoNome.getText());
+                    	System.out.println(campoNome.getText());
                     	show.setPais(campoPais.getText());
                     	show.setDate(sqlData);
                     	//GRAVA OS DADOS NO BANCO
                     	boolean result = show.editarShow();
                     	if(result) {
-                			JOptionPane.showMessageDialog(janelaShow, "Show editada com Sucesso!");
+                			JOptionPane.showMessageDialog(janelaShow, "Show editado com sucesso!");
                 			
                 		} else {
                 			JOptionPane.showMessageDialog(janelaShow, "Não foi possível atualizar este show,\n Insira um show que já exista", "Quem avisa amigo é", JOptionPane.WARNING_MESSAGE);
@@ -239,7 +238,7 @@ public class JanelaShow {
             			int id_show = Integer.parseInt(campoIdShow.getText());            	
                 		boolean result = show.deletarShow(id_show);
                 		if(result) {
-                			JOptionPane.showMessageDialog(janelaShow, "Show Cadastrada com Sucesso!");
+                			JOptionPane.showMessageDialog(janelaShow, "Show deletado com sucesso!");
                 			
                 		} else {
                 			JOptionPane.showMessageDialog(janelaShow,"Show inválido,\n tente um id de show que já exista","Quem avisa amigo é", JOptionPane.WARNING_MESSAGE);
